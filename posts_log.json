@@ -1,5 +1,16 @@
 [
   {
+    "id": "err_1793910343",
+    "text": "✨ I turned my daily health into an operating system ✨\nIt now tracks:\n🩺 Recovery: 8.4h deep slow-wave sleep\n🧠 Focus: zero afternoon energy crashes\n🏃 Movement: 150m weekly Zone 2 cardio\n🥑 Fuel: 40g protein pulses & polyphenols\n💧 Hydration: cellular electrolyte balance\n\nSmall daily commits compound into superhuman vitality ⚡.",
+    "char_count": 324,
+    "status": "FAILED",
+    "timestamp": "2026-11-05 20:25:43 UTC",
+    "threads_url": "https://www.threads.net",
+    "error": "Container creation failed: Error validating access token: Session has expired on Thursday, 05-Nov-26 06:00:00 PST. The current time is Thursday, 05-Nov-26 12:25:43 PST.",
+    "customized": false,
+    "scheduled_time": "Next Available Run"
+  },
+  {
     "id": "18096504725260392",
     "text": "✨ I automated my entire health system ✨\nIt now monitors:\n🩺 Biomarkers: HRV, VO2 Max, & cellular recovery\n☀️ Sunlight: 15m morning retinal photons\n⚡ Energy: 5g creatine monohydrate daily\n🏃 Training: heavy compound lifts + Zone 2\n💤 Sleep: zero blue photons before bed\n\nTreat your biology like production code: optimize daily inputs 🧬.",
     "char_count": 332,

@@ -11,9 +11,9 @@
     "created_at": "2026-11-05 14:10:00 UTC"
   },
   {
-    "id": "queue_auto_1",
-    "text": "✨ I turned my daily health into an operating system ✨\nIt now tracks:\n🩺 Recovery: 8.4h deep slow-wave sleep\n🧠 Focus: zero afternoon energy crashes\n🏃 Movement: 150m weekly Zone 2 cardio\n🥑 Fuel: 40g protein pulses & polyphenols\n💧 Hydration: cellular electrolyte balance\n\nSmall daily commits compound into superhuman vitality ⚡.",
-    "char_count": 332,
+    "id": "queue_auto_2",
+    "text": "✨ I rebuilt my morning routine from scratch ✨\nHere is what changed:\n☀️ 07:00 AM: 15m direct sunlight for cortisol rhythm\n💧 07:15 AM: 500ml water + Celtic sea salt\n🏃 12:00 PM: 30m Zone 2 cardio & GLUT4\n🧠 03:00 PM: cold shower dopamine reset\n💤 10:30 PM: 65°F cool room for REM sleep\n\nYour daily habits build your future biology 🧬.",
+    "char_count": 328,
     "customized": false,
     "scheduled_at": null,
     "slot": "SLOT_1",
@@ -21,13 +21,13 @@
     "created_at": "2026-11-05 13:15:00 UTC"
   },
   {
-    "id": "queue_auto_2",
-    "text": "✨ I rebuilt my morning routine from scratch ✨\nHere is what changed:\n☀️ 07:00 AM: 15m direct sunlight for cortisol rhythm\n💧 07:15 AM: 500ml water + Celtic sea salt\n🏃 12:00 PM: 30m Zone 2 cardio & GLUT4\n🧠 03:00 PM: cold shower dopamine reset\n💤 10:30 PM: 65°F cool room for REM sleep\n\nYour daily habits build your future biology 🧬.",
-    "char_count": 328,
+    "id": "queue_1793910343_3",
+    "text": "✨ I rebuilt my personal health dashboard ✨\nIt now tracks:\n🩺 My sleep: 8h restorative slow-wave cycles\n🧠 Brain focus: zero afternoon crash periods\n🏃 Zone 2: 150m conversational cardio weekly\n🥑 Nutrition: 30+ gut microbiome plants\n💧 Hydration: cellular electrolyte balance\n\nIf you don't take care of your body, where will you live?",
+    "char_count": 329,
     "customized": false,
     "scheduled_at": null,
     "slot": "SLOT_2",
     "scheduled_label": "Run +1 Hour",
-    "created_at": "2026-11-05 13:15:00 UTC"
+    "created_at": "2026-11-05 20:25:43 UTC"
   }
 ]
