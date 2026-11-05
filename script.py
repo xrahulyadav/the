@@ -2,9 +2,19 @@
 """
 Instagram Threads Auto-Posting Engine (Pure GitHub Actions Automation)
 ======================================================================
-- Style: Line-by-line modern founder / biohacker aesthetic (Marc Lou style)
-- Engine: Google Gemini AI (gemini-2.5-flash with gemini-3.8-flash fallback)
+- Style: Exact Marc Lou Builder & Health Biohacking Line-by-Line Aesthetic
+- Model: Google Gemini Flash (gemini-2.5-flash / gemini-3.5 / gemini-3.8-flash)
 - Hard constraint: STRICTLY between 300 and 350 total characters with emojis
+- Structure:
+    ✨ Header line with sparkles ✨
+    It now tracks:
+    🩺 Health/Sleep bullet
+    🧠 Focus/Brain bullet
+    🏃 Movement/Cardio bullet
+    🥑 Nutrition bullet
+    💧 Hydration bullet
+
+    Reflective founder takeaway question or rule
 - Publishing: 2-step Meta Threads Graph API container creation & publishing
 - Target: Threads User ID 29410042778679242
 - Persistence: Updates posts_log.json for GitHub Pages static dashboard consumption
@@ -45,89 +55,84 @@ GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash").strip()
 THREADS_ACCESS_TOKEN = os.getenv("THREADS_ACCESS_TOKEN", "").strip()
 THREADS_USER_ID = os.getenv("THREADS_USER_ID", "29410042778679242").strip()
 
-# Curated High-Converting Line-by-Line Founder Posts (Marc Lou Style)
-# All strictly between 300 and 350 characters total
-CURATED_FOUNDER_POSTS = [
+# Curated Line-by-Line Marc Lou Style Masterpieces (300 - 350 chars verified)
+CURATED_MARC_LOU_POSTS = [
     (
-        "✨ Daily Biohacking Protocol ✨\n\n"
-        "What 90 days of science-backed habits did:\n"
-        "🩺 Deep Sleep: +38 mins slow-wave recovery\n"
-        "🧠 Focus: Zero afternoon brain fog crashes\n"
-        "🏃 Zone 2: Mitochondrial density doubled\n"
-        "🥑 Gut Health: 30+ diverse plant fibers weekly\n\n"
-        "Your biology reflects what you do daily. Prioritize vitality 🧬."
+        "✨ I rebuilt my personal health dashboard ✨\n"
+        "It now tracks:\n"
+        "🩺 My sleep: 8h restorative slow-wave cycles\n"
+        "🧠 Brain focus: zero afternoon crash periods\n"
+        "🏃 Zone 2: 150m conversational cardio weekly\n"
+        "🥑 Nutrition: 30+ gut microbiome plants\n"
+        "💧 Hydration: cellular electrolyte balance\n\n"
+        "If you don't take care of your body, where will you live?"
     ),
     (
-        "⚡ My 5 Non-Negotiable Longevity Rules ⚡\n\n"
-        "How I keep my biological age 7 years younger:\n"
-        "☀️ Morning: 15 mins direct solar photons\n"
-        "💧 Hydration: Sodium + potassium cellular pump\n"
-        "🏃 Cardio: 150 mins weekly conversational Zone 2\n"
-        "💤 Evening: Zero blue photons 90m before bed\n\n"
-        "Consistency compounds into extraordinary vitality 🧬."
+        "✨ I automated my entire health system ✨\n"
+        "It now monitors:\n"
+        "🩺 Biomarkers: HRV, VO2 Max, & cellular recovery\n"
+        "☀️ Sunlight: 15m morning retinal photons\n"
+        "⚡ Energy: 5g creatine monohydrate daily\n"
+        "🏃 Training: heavy compound lifts + Zone 2\n"
+        "💤 Sleep: zero blue photons before bed\n\n"
+        "Treat your biology like production code: optimize daily inputs 🧬."
     ),
     (
-        "✨ The High-Performance Health Stack ✨\n\n"
-        "What I track daily to stay sharp at 100%:\n"
-        "🧠 Brain: Magnesium L-threonate for NMDA clarity\n"
-        "🥑 Nutrition: 40g protein pulses every 4 hours\n"
-        "⚡ Energy: Heat shock proteins via 20m sauna\n"
-        "💤 Recovery: 8.2 hours slow-wave sleep score\n\n"
-        "Take care of your cells, mind handles the rest 🧬."
+        "✨ I turned my daily health into an operating system ✨\n"
+        "It now tracks:\n"
+        "🩺 Recovery: 8.4h deep slow-wave sleep\n"
+        "🧠 Focus: zero afternoon energy crashes\n"
+        "🏃 Movement: 150m weekly Zone 2 cardio\n"
+        "🥑 Fuel: 40g protein pulses & polyphenols\n"
+        "💧 Hydration: cellular electrolyte balance\n\n"
+        "Small daily commits compound into superhuman vitality ⚡."
     ),
     (
-        "🩺 Rebuilding My Baseline Vitality 🩺\n\n"
-        "The routine that transformed my biomarkers:\n"
-        "☀️ 07:00 AM: Retinal solar photons + hydration 💧\n"
-        "🏃 12:00 PM: 30m resistance training & GLUT4\n"
-        "🧠 03:00 PM: Cold thermogenesis dopamine spike\n"
-        "💤 10:30 PM: Glymphatic fluid clearance mode\n\n"
-        "Small biological inputs create massive life leverage ⚡."
+        "✨ I rebuilt my morning routine from scratch ✨\n"
+        "Here is what changed:\n"
+        "☀️ 07:00 AM: 15m direct sunlight for cortisol rhythm\n"
+        "💧 07:15 AM: 500ml water + Celtic sea salt\n"
+        "🏃 12:00 PM: 30m Zone 2 cardio & GLUT4\n"
+        "🧠 03:00 PM: cold shower dopamine reset\n"
+        "💤 10:30 PM: 65°F cool room for REM sleep\n\n"
+        "Your daily habits build your future biology 🧬."
     ),
     (
-        "✨ How I Optimized My Energy Engine ✨\n\n"
-        "My daily physiological biomarkers checklist:\n"
-        "⚡ Cellular ATP: 5g creatine monohydrate\n"
-        "💧 Electrolytes: 500mg sodium in morning water\n"
-        "🏃 Mitochondria: 45m conversational Zone 2 cardio\n"
-        "💤 Recovery: 65°F cool room for deep REM sleep\n\n"
-        "Daily micro-habits yield exponential vitality 🧬."
+        "✨ Why I track my health biomarkers daily ✨\n"
+        "My baseline metrics dashboard:\n"
+        "🩺 Sleep score: 88+ via slow-wave glymphatic cycles\n"
+        "🏃 VO2 Max: top 5% functional longevity marker\n"
+        "🧠 Deep work: 4h uninterrupted morning flow\n"
+        "🥑 Nutrition: 30+ diverse plant fibers weekly\n\n"
+        "What gets measured gets optimized. Take care of your body ⚡."
     ),
     (
-        "🧠 Upgrading Cerebral Metabolism 🧠\n\n"
-        "How I eliminated mental fatigue completely:\n"
-        "☀️ Sunlight: Cortisol awakening pulse at 7 AM\n"
-        "💧 Hydration: Celtic sea salt + magnesium glycinate\n"
-        "🏃 Movement: 10m post-meal glucose walking\n"
-        "💤 Sleep: Consistent circadian sleep architecture\n\n"
-        "Protect your cognitive hardware every single day ⚡."
-    ),
-    (
-        "✨ The Founder Cellular Longevity Stack ✨\n\n"
-        "How I maintain peak stamina building daily:\n"
-        "🩺 Recovery: HRV tracking & vagus nerve stimulation\n"
-        "🥑 Fuel: Whole foods & polyphenol diversity\n"
-        "🏃 Training: Heavy compound lifts & Zone 2 cardio\n"
-        "💤 Rest: 8 hours restorative deep sleep cycles\n\n"
-        "Your health is your greatest compounding asset 🧬."
+        "✨ Upgraded my personal biological hardware ✨\n"
+        "My daily tracking stack:\n"
+        "🩺 Heart rate: 48 bpm resting baseline\n"
+        "⚡ Cellular ATP: 5g creatine + mitochondrial Zone 2\n"
+        "🧠 Neuroplasticity: morning solar exposure + cold plunge\n"
+        "🥑 Cellular gut: prebiotic fibers + polyphenols\n\n"
+        "Your health is your highest-leverage investment. Guard it 🧬."
     )
 ]
 
-SYSTEM_PROMPT = """You are an elite health founder and biohacking researcher writing high-engagement posts for Instagram Threads in the viral style of Marc Lou and Andrew Huberman.
+SYSTEM_PROMPT = """You are Marc Lou writing an iconic, viral health & builder post for Instagram Threads.
+You must follow this exact line-by-line format:
 
-FORMAT REQUIREMENTS (LINE-BY-LINE AESTHETIC):
-Structure the post cleanly across multiple lines:
-Line 1: Punchy, curiosity-driven header with emojis (e.g. ✨ The Daily Longevity Protocol ✨)
-Line 2: Blank line
-Line 3: Short context line (e.g. What tracking my health biomarkers revealed:)
-Lines 4-7: Crisp, bulleted takeaways with emoji bullets (🩺, 🧠, 🏃, 🥑, ⚡, 💤, ☀️, 💧)
-Line 8: Blank line
-Line 9: Punchy concluding takeaway on daily compounding biological habits.
+✨ [Personal action or milestone hook] ✨
+It now tracks:
+🩺 [Sleep/Health metric]: [details]
+🧠 [Focus/Brain metric]: [details]
+🏃 [Cardio/Workout metric]: [details]
+🥑 [Nutrition/Diet metric]: [details]
+💧 [Hydration/Recovery metric]: [details]
+
+[Short reflective founder question or takeaway about daily compounding habits]
 
 CRITICAL HARD CONSTRAINT (NON-NEGOTIABLE):
-The total length of the entire output MUST BE STRICTLY BETWEEN 300 AND 350 TOTAL CHARACTERS (including letters, spaces, emojis, and newlines).
-- NEVER output less than 300 characters.
-- NEVER output more than 350 characters.
+The total length of the entire output MUST BE STRICTLY BETWEEN 300 AND 350 TOTAL CHARACTERS (including spaces, newlines, and emojis). Target ~325 characters.
+- Line-by-line structure with clean newlines.
 - Zero hashtags. Zero surrounding quotes. Zero conversational preamble.
 """
 
@@ -135,7 +140,7 @@ The total length of the entire output MUST BE STRICTLY BETWEEN 300 AND 350 TOTAL
 def enforce_exact_char_range(text: str, min_chars: int = 300, max_chars: int = 350) -> str:
     """
     Guarantees line-by-line formatting strictly satisfies 300 <= len <= 350.
-    Never resorts to repetitive emoji spam.
+    Maintains clean Marc Lou line-by-line structure.
     """
     cleaned = text.strip().strip('"\'“”')
     length = len(cleaned)
@@ -143,9 +148,8 @@ def enforce_exact_char_range(text: str, min_chars: int = 300, max_chars: int = 3
     if min_chars <= length <= max_chars:
         return cleaned
 
-    # If exceeding max_chars, trim at last sentence boundary or select curated post
+    # If exceeding max_chars, trim gracefully at lines
     if length > max_chars:
-        # Try trimming trailing text to fit
         lines = cleaned.split("\n")
         trimmed = ""
         for line in lines:
@@ -157,31 +161,44 @@ def enforce_exact_char_range(text: str, min_chars: int = 300, max_chars: int = 3
         if min_chars <= len(trimmed) <= max_chars:
             return trimmed
 
-    # If below min_chars or trimming broke structure, return one of our curated line-by-line posts
-    return random.choice(CURATED_FOUNDER_POSTS)
+    # If out of range or trimmed structure broke, pick from our curated Marc Lou master library
+    return random.choice(CURATED_MARC_LOU_POSTS)
 
 
 def generate_wellness_insight() -> str:
-    """Generate high-impact health micro-article in line-by-line founder format."""
+    """Generate high-impact health micro-article in exact Marc Lou line-by-line style."""
     if not GEMINI_API_KEY or not GEMINI_API_KEY.startswith("AIzaSy"):
-        print("[AI CORE] Gemini API Key unconfigured or non-AIStudio format. Using curated Marc Lou line-by-line post.")
-        return random.choice(CURATED_FOUNDER_POSTS)
+        print("[AI CORE] Using curated Marc Lou line-by-line post (Gemini key unconfigured or awaiting AI Studio key).")
+        return random.choice(CURATED_MARC_LOU_POSTS)
 
     try:
         from google import genai
         from google.genai import types
         client = genai.Client(api_key=GEMINI_API_KEY)
     except Exception as e:
-        print(f"[AI CORE ERROR] Client init error: {e}. Using curated line-by-line post.")
-        return random.choice(CURATED_FOUNDER_POSTS)
+        print(f"[AI CORE ERROR] Client init error: {e}. Using curated Marc Lou post.")
+        return random.choice(CURATED_MARC_LOU_POSTS)
 
     user_prompt = (
-        "Write a line-by-line founder biohacking post for Instagram Threads.\n"
-        "Include a header with emojis, 4 bullet lines (🩺, 🧠, 🏃, 🥑), and a closing takeaway.\n"
-        "MANDATORY: Total length MUST BE STRICTLY BETWEEN 300 AND 350 CHARACTERS."
+        "Write an exact Marc Lou style line-by-line post for Instagram Threads.\n"
+        "Structure:\n"
+        "✨ I rebuilt my personal health system ✨\n"
+        "It now tracks:\n"
+        "🩺 My sleep: [details]\n"
+        "🧠 Brain focus: [details]\n"
+        "🏃 Zone 2: [details]\n"
+        "🥑 Nutrition: [details]\n\n"
+        "[Reflective founder question or rule]\n\n"
+        "MANDATORY: Total length MUST BE STRICTLY BETWEEN 300 AND 350 TOTAL CHARACTERS."
     )
 
-    model_candidates = [GEMINI_MODEL, "gemini-2.5-flash", "gemini-3.8-flash", "gemini-1.5-flash"]
+    # Model hierarchy: try configured model, then 2.5-flash, 3.8-flash, 1.5-flash
+    model_candidates = [
+        GEMINI_MODEL,
+        "gemini-2.5-flash",
+        "gemini-3.8-flash",
+        "gemini-1.5-flash"
+    ]
     seen = set()
     model_candidates = [m for m in model_candidates if m and not (m in seen or seen.add(m))]
 
@@ -201,7 +218,7 @@ def generate_wellness_insight() -> str:
             raw = re.sub(r'#\w+', '', raw).strip()
 
             if 300 <= len(raw) <= 350:
-                print(f"[AI CORE SUCCESS] Valid line-by-line post generated ({len(raw)} chars).")
+                print(f"[AI CORE SUCCESS] Valid Marc Lou style post generated with {model_name} ({len(raw)} chars).")
                 return raw
 
             print(f"[AI CORE] Output from {model_name} is {len(raw)} chars. Validating bounds.")
@@ -212,7 +229,7 @@ def generate_wellness_insight() -> str:
             print(f"[AI CORE WARN] Model {model_name} error: {e}")
             continue
 
-    return random.choice(CURATED_FOUNDER_POSTS)
+    return random.choice(CURATED_MARC_LOU_POSTS)
 
 
 def publish_to_threads(text: str) -> Tuple[str, Optional[str], Optional[str]]:
@@ -307,13 +324,13 @@ def main():
     print(f" Time: {utc_now.strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print("=" * 65)
 
-    # 1. Generate line-by-line micro-article
+    # 1. Generate line-by-line micro-article in Marc Lou style
     post_text = generate_wellness_insight()
     char_len = len(post_text)
     print(f"[AI GENERATOR] Generated post ({char_len} chars):")
-    print("-" * 50)
+    print("-" * 55)
     print(post_text)
-    print("-" * 50)
+    print("-" * 55)
 
     # 2. Publish to Instagram Threads Graph API
     status, post_id, detail = publish_to_threads(post_text)
