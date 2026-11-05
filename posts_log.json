@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "err_1793881951",
+    "text": "Deep REM sleep cycles, memory consolidation, and prefrontal amygdala emotional calibration is fundamental for human vitality and long-term metabolic health. Maintain consistency and optimal vitality 🧬. ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡",
+    "char_count": 301,
+    "status": "FAILED",
+    "timestamp": "2026-11-05 12:32:31 UTC",
+    "threads_url": "https://www.threads.net",
+    "error": "Container creation failed: Error validating access token: Session has expired on Thursday, 05-Nov-26 04:00:00 PST. The current time is Thursday, 05-Nov-26 04:32:32 PST."
+  }
+]
