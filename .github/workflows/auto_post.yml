@@ -42,14 +42,10 @@ jobs:
         run: |
           python script.py
 
-      - name: Commit and Push Updated Dispatch Logs and Queue
+      - name: Auto Commit Updated Logs
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name 'xrahulyadav'
+          git config --global user.email 'rahuldrop.us@gmail.com'
           git add posts_log.json upcoming_queue.json
-          if git diff --staged --quiet; then
-            echo "No log or queue changes to commit."
-          else
-            git commit -m "chore(logs): autonomous threads dispatch and queue update [skip ci]"
-            git push
-          fi
+          git commit -m "Updated execution logs [skip ci]" || exit 0
+          git push
