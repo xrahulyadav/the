@@ -1,0 +1,55 @@
+name: Instagram Threads Auto-Poster
+
+on:
+  schedule:
+    # Run every 1 hour (at minute 0 of every hour -> 24 posts/day)
+    - cron: '0 * * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+# Grant write permissions to commit and push updated posts_log.json
+permissions:
+  contents: write
+
+jobs:
+  auto_dispatch:
+    name: Generate & Post to Threads
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Execute Threads Auto-Posting Engine
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ secrets.GEMINI_MODEL || 'gemini-2.5-flash' }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+        run: |
+          python script.py
+
+      - name: Commit and Push Updated Dispatch Logs
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add posts_log.json
+          if git diff --staged --quiet; then
+            echo "No log changes to commit."
+          else
+            git commit -m "chore(logs): autonomous threads dispatch update [skip ci]"
+            git push
+          fi

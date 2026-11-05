@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threads AI Dispatcher &amp; Monitor // GitHub Ecosystem</title>
+  
+  <!-- Apple-Inspired Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       APPLE DARK DESIGN SYSTEM (GITHUB PAGES STATIC SUITE)
+       ========================================================================== */
+    :root {
+      --bg-canvas: #050507;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-bg-hover: rgba(255, 255, 255, 0.05);
+      --card-border: 1px solid rgba(255, 255, 255, 0.08);
+      --card-border-hover: rgba(255, 255, 255, 0.18);
+      --card-radius: 18px;
+      
+      --text-primary: #FFFFFF;
+      --text-muted: #A1A1AA;
+      --text-subtle: #71717A;
+      
+      --accent-emerald: #10B981;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.25);
+      --accent-blue: #3B82F6;
+      --accent-blue-glow: rgba(59, 130, 246, 0.3);
+      --accent-amber: #F59E0B;
+      --accent-red: #EF4444;
+
+      --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+      
+      --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: var(--font-system);
+      min-height: 100vh;
+      line-height: 1.5;
+      overflow-x: hidden;
+      letter-spacing: -0.012em;
+    }
+
+    /* Ambient Subtle Apple Glow */
+    body::before {
+      content: "";
+      position: fixed;
+      top: -160px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.04) 50%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(100px);
+    }
+
+    /* ==========================================================================
+       STEALTH GATEWAY MODAL (CLIENT-SIDE AUTH SHIELD)
+       ========================================================================== */
+    .stealth-shield {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #050507;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity 0.4s var(--ease-apple), visibility 0.4s var(--ease-apple);
+    }
+
+    .stealth-shield.unlocked {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .stealth-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      padding: 40px 32px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
+      text-align: center;
+      position: relative;
+    }
+
+    .stealth-badge-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.04);
+      border: var(--card-border);
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .stealth-icon-svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--text-primary);
+    }
+
+    .stealth-title {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .stealth-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 26px;
+    }
+
+    .error-banner {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #F87171;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-bottom: 20px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      text-align: left;
+    }
+
+    .error-banner.show {
+      display: flex;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-subtle);
+      margin-bottom: 6px;
+    }
+
+    .input-field {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-family: var(--font-system);
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.2s var(--ease-apple);
+    }
+
+    .input-field:focus {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 16px rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: #FFFFFF;
+      color: #000000;
+      border: none;
+      border-radius: 12px;
+      padding: 13px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s var(--ease-apple);
+      margin-top: 6px;
+    }
+
+    .btn-submit:hover {
+      background: #E4E4E7;
+      transform: translateY(-1px);
+    }
+
+    .stealth-footer {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-subtle);
+      margin-top: 24px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ==========================================================================
+       MAIN DASHBOARD LAYOUT
+       ========================================================================== */
+    .container {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 40px 24px 88px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 36px;
+      padding-bottom: 24px;
+      border-bottom: var(--card-border);
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .threads-badge {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.04);
+      border: var(--card-border);
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .threads-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--text-primary);
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .live-pulse-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--accent-emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-emerald);
+      animation: pulse-glow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-apple);
+      border: 1px solid transparent;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: #FFFFFF;
+      color: #000000;
+      font-weight: 600;
+      box-shadow: 0 4px 18px rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-primary:hover {
+      background: #E4E4E7;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(255, 255, 255, 0.25);
+    }
+
+    /* ==========================================================================
+       STATS ROW (4 GLASS CARDS)
+       ========================================================================== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      padding: 22px 24px;
+      transition: all 0.3s var(--ease-apple);
+      position: relative;
+    }
+
+    .glass-card:hover {
+      background: var(--card-bg-hover);
+      border: var(--card-border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-subtle);
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      font-family: var(--font-system);
+    }
+
+    .stat-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ==========================================================================
+       INFRASTRUCTURE INFO CARD
+       ========================================================================== */
+    .infra-banner {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.04) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: var(--card-radius);
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .infra-details h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .infra-details p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .infra-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 3px 8px;
+      border-radius: 6px;
+      color: #93C5FD;
+    }
+
+    /* ==========================================================================
+       LOGS SECTION & FEED
+       ========================================================================== */
+    .logs-section {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      padding: 32px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-count {
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .logs-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Post Card */
+    .post-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 22px;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .post-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .post-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .post-meta-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .post-time {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    .status-pill {
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      padding: 2px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+    }
+
+    .status-success {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-failed {
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--accent-red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .char-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+    }
+
+    .char-badge.valid {
+      color: var(--accent-emerald);
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.06);
+    }
+
+    .char-badge.invalid {
+      color: var(--accent-red);
+      border-color: rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.06);
+    }
+
+    .post-body {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      margin-bottom: 14px;
+    }
+
+    .post-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .post-id-tag {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-subtle);
+    }
+
+    .btn-link {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #93C5FD;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      padding: 4px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-link:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.4);
+      color: #FFFFFF;
+    }
+
+    /* Apple-Style Toast */
+    .apple-toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #000000;
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s var(--ease-apple);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .apple-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-subtle);
+      font-size: 13px;
+      font-family: var(--font-mono);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Stealth Security Gateway (Client-Side Shield) -->
+  <div class="stealth-shield" id="stealth-shield">
+    <div class="stealth-card">
+      <div class="stealth-badge-icon">
+        <svg class="stealth-icon-svg" viewBox="0 0 192 192">
+          <path d="M141.537 88.9883C140.71 88.5919 139.87 88.2104 139.019 87.8451C137.537 60.5382 122.616 44.905 97.5619 44.745C97.4484 44.7442 97.3355 44.7442 97.222 44.745C77.4172 44.745 61.5414 55.4312 55.7725 73.0805C51.6872 85.5786 52.4831 100.866 61.2725 111.96C69.0063 121.722 81.3323 127.255 96.0023 127.255C108.977 127.255 120.449 123.011 128.513 115.228C136.21 107.798 140.485 97.2285 141.537 88.9883ZM96.5303 114.771C74.8385 114.771 63.899 99.4674 65.5721 82.8021C67.3321 65.2676 81.082 56.4024 97.1068 56.4024C113.882 56.4024 125.072 67.4338 126.505 84.1481C117.476 82.2037 106.673 81.2583 96.5303 81.2583C82.5222 81.2583 71.9794 85.2974 68.3292 92.0543C64.9125 98.3789 66.8625 106.321 73.0441 110.134C78.4326 113.46 86.8378 114.771 96.5303 114.771Z"/>
+        </svg>
+      </div>
+
+      <h1 class="stealth-title">Enterprise Gateway</h1>
+      <p class="stealth-subtitle">GitHub Pages Secured Architecture</p>
+
+      <div class="error-banner" id="error-banner">
+        <span>⚠</span>
+        <span id="error-text">Invalid email or password format.</span>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="input-label" for="login-email">Administrator Identity</label>
+          <input 
+            type="text" 
+            id="login-email" 
+            class="input-field" 
+            placeholder="admin@enterprise.internal" 
+            autocomplete="off" 
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="input-label" for="login-password">Security Credential</label>
+          <input 
+            type="password" 
+            id="login-password" 
+            class="input-field" 
+            placeholder="••••••••••••" 
+            autocomplete="off" 
+            required
+          >
+        </div>
+
+        <button type="submit" class="btn-submit" id="btn-login-submit">
+          Authenticate Access
+        </button>
+      </form>
+
+      <div class="stealth-footer">
+        SECURITY SHIELD // AUTH REQUIRED FOR MONITORING
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Application -->
+  <div class="container">
+    <header>
+      <div class="brand-section">
+        <div class="threads-badge">
+          <svg class="threads-icon" viewBox="0 0 192 192">
+            <path d="M141.537 88.9883C140.71 88.5919 139.87 88.2104 139.019 87.8451C137.537 60.5382 122.616 44.905 97.5619 44.745C97.4484 44.7442 97.3355 44.7442 97.222 44.745C77.4172 44.745 61.5414 55.4312 55.7725 73.0805C51.6872 85.5786 52.4831 100.866 61.2725 111.96C69.0063 121.722 81.3323 127.255 96.0023 127.255C108.977 127.255 120.449 123.011 128.513 115.228C136.21 107.798 140.485 97.2285 141.537 88.9883ZM96.5303 114.771C74.8385 114.771 63.899 99.4674 65.5721 82.8021C67.3321 65.2676 81.082 56.4024 97.1068 56.4024C113.882 56.4024 125.072 67.4338 126.505 84.1481C117.476 82.2037 106.673 81.2583 96.5303 81.2583C82.5222 81.2583 71.9794 85.2974 68.3292 92.0543C64.9125 98.3789 66.8625 106.321 73.0441 110.134C78.4326 113.46 86.8378 114.771 96.5303 114.771Z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">
+            THREADS_AI_CORE
+            <span class="live-pulse-badge">
+              <span class="pulse-dot"></span>
+              GITHUB ACTIONS CRON
+            </span>
+          </h1>
+          <p class="brand-subtitle">Automated Health &amp; Wellness Publisher • Static GitHub Pages Host</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn btn-secondary" id="btn-refresh" title="Reload posts_log.json">
+          ↻ Fetch Latest Logs
+        </button>
+        <button class="btn btn-secondary" id="btn-lock" title="Lock Portal">
+          <span>Lock Session</span>
+          <span style="font-size: 11px; opacity: 0.6;">⎋</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Metrics Row -->
+    <section class="stats-grid">
+      <!-- 1. Total Posts -->
+      <div class="glass-card">
+        <div class="stat-label">Total Posts Triggered</div>
+        <div class="stat-value" id="stat-total-posts">0</div>
+        <div class="stat-sub">Actions Cron: Every 1 Hour (0 * * * *)</div>
+      </div>
+
+      <!-- 2. Success Rate -->
+      <div class="glass-card">
+        <div class="stat-label">Success Rate</div>
+        <div class="stat-value" style="color: var(--accent-emerald);" id="stat-success-rate">100%</div>
+        <div class="stat-sub" id="stat-failure-count">0 Dispatches Failed</div>
+      </div>
+
+      <!-- 3. Next Cron Run Countdown -->
+      <div class="glass-card">
+        <div class="stat-label">Next Scheduled Run</div>
+        <div class="stat-value" style="font-size: 22px; font-weight: 600;" id="stat-countdown">--:--</div>
+        <div class="stat-sub" id="stat-countdown-sub">Hourly Cron Trigger</div>
+      </div>
+
+      <!-- 4. 300-350 Range Validation -->
+      <div class="glass-card">
+        <div class="stat-label">Length Compliance</div>
+        <div class="stat-value" style="color: #60A5FA;" id="stat-length-compliance">100%</div>
+        <div class="stat-sub">Strict 300 - 350 Char Enforcement</div>
+      </div>
+    </section>
+
+    <!-- GitHub Ecosystem Architecture Info Banner -->
+    <div class="infra-banner">
+      <div class="infra-details">
+        <h3>
+          <span>⚡</span>
+          <span>Zero-Cost Serverless GitHub Architecture</span>
+        </h3>
+        <p>Backend runs via <strong>GitHub Actions</strong> every 1 hour, auto-committing dispatch results to <code>posts_log.json</code>. Frontend hosted 100% statically on <strong>GitHub Pages</strong>.</p>
+      </div>
+      <div>
+        <span class="infra-tag">Cron: 0 * * * *</span>
+        <span class="infra-tag" style="margin-left: 6px;">gemini-2.5-flash</span>
+      </div>
+    </div>
+
+    <!-- Live Execution Logs -->
+    <section class="logs-section">
+      <div class="section-header">
+        <div class="section-title">
+          <span>📜</span>
+          <span>Execution Archives (posts_log.json)</span>
+          <span class="badge-count" id="logs-count-badge">0</span>
+        </div>
+        <div style="font-size: 11px; font-family: var(--font-mono); color: var(--text-subtle);">
+          Auto-Updated on every Workflow Run
+        </div>
+      </div>
+
+      <div class="logs-feed" id="logs-feed">
+        <div class="empty-state">Loading dispatch logs from posts_log.json...</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Toast Element -->
+  <div class="apple-toast" id="apple-toast">
+    <span id="toast-icon">✓</span>
+    <span id="toast-message">Data synchronized successfully.</span>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      // Stealth Security Configuration (Client-Side Hidden 3-Try Mechanism)
+      const SECRET_EMAIL = "1";
+      const SECRET_PASSWORD = " "; // Single space character
+      let secretAttempts = 0;
+
+      // DOM Elements
+      const shield = document.getElementById('stealth-shield');
+      const loginForm = document.getElementById('login-form');
+      const emailInput = document.getElementById('login-email');
+      const passInput = document.getElementById('login-password');
+      const errorBanner = document.getElementById('error-banner');
+      const errorText = document.getElementById('error-text');
+
+      const statTotalPosts = document.getElementById('stat-total-posts');
+      const statSuccessRate = document.getElementById('stat-success-rate');
+      const statFailureCount = document.getElementById('stat-failure-count');
+      const statCountdown = document.getElementById('stat-countdown');
+      const statCountdownSub = document.getElementById('stat-countdown-sub');
+      const statLengthCompliance = document.getElementById('stat-length-compliance');
+
+      const logsFeed = document.getElementById('logs-feed');
+      const logsCountBadge = document.getElementById('logs-count-badge');
+      const btnRefresh = document.getElementById('btn-refresh');
+      const btnLock = document.getElementById('btn-lock');
+
+      const appleToast = document.getElementById('apple-toast');
+      const toastMessage = document.getElementById('toast-message');
+      const toastIcon = document.getElementById('toast-icon');
+
+      function showToast(msg, icon = "✓") {
+        toastMessage.textContent = msg;
+        toastIcon.textContent = icon;
+        appleToast.classList.add('show');
+        setTimeout(() => {
+          appleToast.classList.remove('show');
+        }, 3000);
+      }
+
+      // Check existing session auth state
+      if (sessionStorage.getItem('stealth_gateway_auth') === 'verified') {
+        shield.classList.add('unlocked');
+        loadLogs();
+      }
+
+      // Stealth Login Form Handler
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = emailInput.value;
+        const pass = passInput.value;
+
+        // Check if secret credentials match
+        if (email === SECRET_EMAIL && pass === SECRET_PASSWORD) {
+          secretAttempts++;
+          console.log(`[STEALTH SHIELD] Secret credential match (Attempt ${secretAttempts}/3)`);
+
+          if (secretAttempts === 3) {
+            // UNLOCKED ON EXACT 3RD TRY
+            secretAttempts = 0;
+            sessionStorage.setItem('stealth_gateway_auth', 'verified');
+            shield.classList.add('unlocked');
+            showToast("Access granted. Session unlocked.");
+            loadLogs();
+            return;
+          }
+        } else {
+          // Any incorrect credential immediately resets secret counter
+          secretAttempts = 0;
+        }
+
+        // Show generic error without revealing count or hints
+        errorBanner.classList.add('show');
+        passInput.value = '';
+      });
+
+      // Lock Session Handler
+      btnLock.addEventListener('click', () => {
+        sessionStorage.removeItem('stealth_gateway_auth');
+        secretAttempts = 0;
+        shield.classList.remove('unlocked');
+        showToast("Session locked.", "🔒");
+      });
+
+      // Fetch and Parse posts_log.json
+      async function loadLogs() {
+        try {
+          // Cache busting query param ensures fresh data on GitHub Pages
+          const res = await fetch(`posts_log.json?t=${Date.now()}`);
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+          }
+          let data = await res.json();
+          let posts = [];
+
+          if (Array.isArray(data)) {
+            posts = data;
+          } else if (data && Array.isArray(data.posts)) {
+            posts = data.posts;
+          }
+
+          renderDashboard(posts);
+          showToast(`Synchronized ${posts.length} records.`);
+        } catch (err) {
+          console.warn("[LOG LOAD ERROR]", err);
+          logsFeed.innerHTML = `
+            <div class="empty-state">
+              Unable to load posts_log.json (${escapeHtml(err.message)}).<br>
+              Ensure the GitHub Actions workflow has run and committed posts_log.json.
+            </div>
+          `;
+        }
+      }
+
+      // Render Metrics and Feed
+      function renderDashboard(posts) {
+        logsCountBadge.textContent = posts.length;
+        statTotalPosts.textContent = posts.length;
+
+        if (posts.length === 0) {
+          statSuccessRate.textContent = "100%";
+          statFailureCount.textContent = "0 Failures";
+          statLengthCompliance.textContent = "100%";
+          logsFeed.innerHTML = '<div class="empty-state">No execution logs found in posts_log.json yet.</div>';
+          return;
+        }
+
+        let successCount = 0;
+        let validCharCount = 0;
+
+        posts.forEach(p => {
+          if (p.status === 'SUCCESS') successCount++;
+          const len = p.char_count || (p.text ? p.text.length : 0);
+          if (len >= 300 && len <= 350) validCharCount++;
+        });
+
+        const successRate = ((successCount / posts.length) * 100).toFixed(1);
+        const compRate = ((validCharCount / posts.length) * 100).toFixed(1);
+
+        statSuccessRate.textContent = `${successRate}%`;
+        statFailureCount.textContent = `${posts.length - successCount} Failed Dispatches`;
+        statLengthCompliance.textContent = `${compRate}%`;
+
+        // Render Feed
+        logsFeed.innerHTML = posts.map(p => {
+          const isSuccess = p.status === 'SUCCESS';
+          const charLen = p.char_count || (p.text ? p.text.length : 0);
+          const isValidRange = charLen >= 300 && charLen <= 350;
+
+          return `
+            <div class="post-card">
+              <div class="post-top">
+                <div class="post-meta-left">
+                  <span class="status-pill ${isSuccess ? 'status-success' : 'status-failed'}">
+                    ${isSuccess ? '● SUCCESS' : '✕ FAILED'}
+                  </span>
+                  <span class="post-time">${escapeHtml(p.timestamp || 'Recent')}</span>
+                  <span class="char-badge ${isValidRange ? 'valid' : 'invalid'}">
+                    ${isValidRange ? '✓' : '⚠'} ${charLen} chars
+                  </span>
+                </div>
+                <div>
+                  ${p.threads_url && !String(p.id).startsWith('mock_') ? `
+                    <a href="${escapeHtml(p.threads_url)}" target="_blank" rel="noopener" class="btn-link">
+                      View on Threads ↗
+                    </a>
+                  ` : ''}
+                </div>
+              </div>
+
+              <div class="post-body">
+                ${escapeHtml(p.text || 'No post content recorded')}
+              </div>
+
+              <div class="post-bottom">
+                <span class="post-id-tag">ID: ${escapeHtml(String(p.id))}</span>
+                <span style="font-size: 11px; color: var(--text-subtle); font-family: var(--font-mono);">
+                  ${isValidRange ? 'Strict 300-350 Range Verified' : 'Length Flagged'}
+                </span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Next Cron Run Countdown Timer (Every top of the hour: :00)
+      function updateCountdown() {
+        const now = new Date();
+        const nextHour = new Date(now);
+        nextHour.setHours(now.getHours() + 1, 0, 0, 0);
+
+        const diffMs = nextHour - now;
+        const minutes = Math.floor(diffMs / 60000);
+        const seconds = Math.floor((diffMs % 60000) / 1000);
+
+        const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        statCountdown.textContent = formatted;
+        statCountdownSub.textContent = `Auto-dispatch in ~${minutes}m ${seconds}s`;
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      // Refresh Button Handler
+      btnRefresh.addEventListener('click', () => {
+        loadLogs();
+      });
+
+      // HTML Escape Utility
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      // Auto-refresh feed every 45 seconds
+      setInterval(() => {
+        if (sessionStorage.getItem('stealth_gateway_auth') === 'verified') {
+          loadLogs();
+        }
+      }, 45000);
+    })();
+  </script>
+</body>
+</html>
