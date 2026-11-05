@@ -21,6 +21,13 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import requests
 
+# Ensure UTF-8 stdout encoding on all platforms (prevents Windows cp1252 emoji crash)
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 # Try loading .env for local testing if available
 try:
     from dotenv import load_dotenv
