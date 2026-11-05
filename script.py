@@ -343,6 +343,20 @@ def save_queue(queue: List[Dict[str, Any]]):
     print(f"[DATA PERSISTENCE] Successfully updated {QUEUE_FILE} ({len(queue)} upcoming items).")
 
 
+def parse_iso_datetime(dt_str: Optional[str]) -> Optional[datetime.datetime]:
+    """Parse ISO datetime string into UTC datetime object safely."""
+    if not dt_str:
+        return None
+    try:
+        clean_str = dt_str.replace("Z", "+00:00")
+        dt = datetime.datetime.fromisoformat(clean_str)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=datetime.timezone.utc)
+        return dt.astimezone(datetime.timezone.utc)
+    except Exception:
+        return None
+
+
 def main():
     print("=" * 65)
     utc_now = datetime.datetime.now(datetime.timezone.utc)
@@ -351,18 +365,49 @@ def main():
     print(f" Time: {utc_now.strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print("=" * 65)
 
-    # 1. Check Upcoming Scheduled Queue
+    # 1. Process Upcoming Scheduled Queue
     queue = load_queue()
-    was_customized = False
-    queue_id = None
+    scheduled_item = None
+    target_index = -1
+    scheduled_for_info = None
 
-    if queue:
-        # Pop the first scheduled post from queue
-        scheduled_item = queue.pop(0)
+    # Step A: Check for user-scheduled posts with explicit scheduled_at that are DUE (<= utc_now)
+    due_custom_items = []
+    for idx, item in enumerate(queue):
+        sched_str = item.get("scheduled_at")
+        if sched_str:
+            dt = parse_iso_datetime(sched_str)
+            if dt and dt <= utc_now:
+                due_custom_items.append((idx, item, dt))
+
+    if due_custom_items:
+        # Sort by earliest scheduled date/time and pick the most urgent due item
+        due_custom_items.sort(key=lambda x: x[2])
+        target_index, scheduled_item, due_dt = due_custom_items[0]
+        scheduled_for_info = scheduled_item.get("scheduled_display") or scheduled_item.get("scheduled_at")
+        print(f"[QUEUE ENGINE] Processing DUE custom-scheduled post: {scheduled_item.get('id')} (Scheduled for: {scheduled_for_info})")
+        queue.pop(target_index)
+    else:
+        # Step B: Pick the first queued item that is NOT time-locked to a future date
+        for idx, item in enumerate(queue):
+            sched_str = item.get("scheduled_at")
+            if not sched_str:
+                # Immediate next available run
+                target_index = idx
+                scheduled_item = queue.pop(target_index)
+                scheduled_for_info = "Next Available Run"
+                print(f"[QUEUE ENGINE] Dispatched immediate queue item: {scheduled_item.get('id')}")
+                break
+            else:
+                dt = parse_iso_datetime(sched_str)
+                if dt and dt > utc_now:
+                    print(f"[QUEUE ENGINE] Post {item.get('id')} is scheduled for future date ({sched_str}). Preserving in queue.")
+                    continue
+
+    if scheduled_item:
         post_text = scheduled_item.get("text", "").strip()
         was_customized = scheduled_item.get("customized", False)
         queue_id = scheduled_item.get("id", "queue_item")
-        print(f"[QUEUE ENGINE] Dispatched item from queue: {queue_id} (customized={was_customized})")
 
         # Validate content exists
         if not post_text:
@@ -373,8 +418,10 @@ def main():
             # If not customized by user and slightly outside bounds, format it
             post_text = enforce_exact_char_range(post_text)
     else:
-        print("[QUEUE ENGINE] Queue empty. Generating fresh AI insight.")
+        print("[QUEUE ENGINE] No pending or due queue item for this hour. Generating fresh AI insight.")
         post_text = generate_wellness_insight()
+        was_customized = False
+        scheduled_for_info = "Autonomous Hourly Cycle"
 
     char_len = len(post_text)
     print(f"[DISPATCH CONTENT] Target post ({char_len} chars):")
@@ -397,7 +444,8 @@ def main():
         "timestamp": utc_now.strftime("%Y-%m-%d %H:%M:%S UTC"),
         "threads_url": threads_url or "https://www.threads.net",
         "error": error_msg,
-        "customized": was_customized
+        "customized": was_customized,
+        "scheduled_time": scheduled_for_info
     }
 
     # 4. Save to posts_log.json
@@ -414,12 +462,13 @@ def main():
             "text": fresh_draft,
             "char_count": len(fresh_draft),
             "customized": False,
+            "scheduled_at": None,
             "slot": f"SLOT_{new_slot_idx}",
             "scheduled_label": "Next Run (Upcoming Top of the Hour)" if new_slot_idx == 1 else f"Run +{new_slot_idx - 1} Hour{'s' if new_slot_idx > 2 else ''}",
             "created_at": utc_now.strftime("%Y-%m-%d %H:%M:%S UTC")
         })
 
-    # Standardize slot labels for dashboard display
+    # Standardize slot labels for auto items (leave explicit user schedules untouched)
     slot_labels = [
         "Next Run (Upcoming Top of the Hour)",
         "Run +1 Hour",
@@ -427,9 +476,12 @@ def main():
         "Run +3 Hours",
         "Run +4 Hours"
     ]
-    for idx, item in enumerate(queue):
-        item["slot"] = f"SLOT_{idx + 1}"
-        item["scheduled_label"] = slot_labels[idx] if idx < len(slot_labels) else f"Run +{idx} Hours"
+    auto_count = 0
+    for item in queue:
+        if not item.get("scheduled_at"):
+            item["slot"] = f"SLOT_{auto_count + 1}"
+            item["scheduled_label"] = slot_labels[auto_count] if auto_count < len(slot_labels) else f"Run +{auto_count} Hours"
+            auto_count += 1
         item["char_count"] = len(item.get("text", ""))
 
     save_queue(queue)

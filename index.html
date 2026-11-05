@@ -354,18 +354,6 @@
       box-shadow: 0 6px 24px rgba(255, 255, 255, 0.25);
     }
 
-    .btn-emerald {
-      background: rgba(16, 185, 129, 0.15);
-      color: #34D399;
-      border-color: rgba(16, 185, 129, 0.35);
-    }
-
-    .btn-emerald:hover {
-      background: rgba(16, 185, 129, 0.25);
-      border-color: rgba(16, 185, 129, 0.6);
-      transform: translateY(-1px);
-    }
-
     /* ==========================================================================
        STATS ROW (4 GLASS CARDS)
        ========================================================================== */
@@ -504,7 +492,7 @@
       border-radius: 999px;
     }
 
-    /* Next Post Featured Spotlight */
+    /* Spotlight Card */
     .spotlight-card {
       background: linear-gradient(145deg, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.05) 50%, rgba(255, 255, 255, 0.02) 100%);
       border: 1px solid rgba(59, 130, 246, 0.35);
@@ -611,12 +599,28 @@
       margin-bottom: 10px;
       font-size: 11px;
       font-family: var(--font-mono);
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
     .queue-slot-badge {
       color: #A1A1AA;
       background: rgba(255, 255, 255, 0.05);
       padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .time-lock-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: #C084FC;
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.35);
+      padding: 2px 7px;
       border-radius: 6px;
     }
 
@@ -637,6 +641,39 @@
       align-items: center;
       padding-top: 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.04);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Schedule Timing Controls in Editor */
+    .schedule-timing-group {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+
+    .timing-radio-row {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .timing-radio-opt {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .timing-radio-opt input[type="radio"] {
+      accent-color: var(--accent-blue);
+      cursor: pointer;
     }
 
     /* ==========================================================================
@@ -819,6 +856,8 @@
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85);
       transform: scale(0.96) translateY(10px);
       transition: all 0.3s var(--ease-apple);
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
     .modal-overlay.open .modal-card {
@@ -928,7 +967,7 @@
 
     .editor-textarea {
       width: 100%;
-      height: 220px;
+      height: 180px;
       background: rgba(0, 0, 0, 0.4);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 12px;
@@ -939,7 +978,7 @@
       line-height: 1.6;
       resize: vertical;
       outline: none;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .editor-textarea:focus {
@@ -1139,7 +1178,7 @@
         </div>
         <div class="header-actions">
           <button class="btn btn-secondary" id="btn-add-queue-item" style="padding: 6px 14px; font-size: 12px;">
-            ➕ Add Custom Post
+            ➕ Schedule New Post (तारीख व समय तय करें)
           </button>
         </div>
       </div>
@@ -1151,7 +1190,7 @@
 
       <!-- Secondary Queue Items -->
       <div style="margin: 28px 0 14px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-subtle); display: flex; align-items: center; gap: 8px;">
-        <span>FOLLOWING IN LINE (आगे के शेड्यूल)</span>
+        <span>SCHEDULED QUEUE LINEUP (आगे के शेड्यूल्ड पोस्ट्स)</span>
         <span style="height: 1px; flex: 1; background: rgba(255, 255, 255, 0.06);"></span>
       </div>
       <div class="queue-grid" id="secondary-queue-list">
@@ -1178,15 +1217,42 @@
     </section>
   </div>
 
-  <!-- POST EDITOR MODAL -->
+  <!-- POST EDITOR & SCHEDULER MODAL -->
   <div class="modal-overlay" id="editor-modal">
     <div class="modal-card">
       <div class="modal-header">
         <div>
-          <h3 class="modal-title" id="editor-modal-title">Customize Scheduled Post</h3>
-          <p class="modal-sub" id="editor-modal-sub">Edit post text or insert Marc Lou line-by-line format</p>
+          <h3 class="modal-title" id="editor-modal-title">Schedule &amp; Customize Post</h3>
+          <p class="modal-sub" id="editor-modal-sub">Set post text and target publication date &amp; time</p>
         </div>
         <button class="btn-close" id="btn-close-editor">✕</button>
+      </div>
+
+      <!-- DATE & TIME SCHEDULING CONTROLS -->
+      <div class="schedule-timing-group">
+        <label class="input-label">📅 Publish Schedule Timing (पोस्ट होने की तारीख व समय)</label>
+        <div class="timing-radio-row">
+          <label class="timing-radio-opt">
+            <input type="radio" name="timing-mode" value="auto" id="timing-mode-auto" checked>
+            <span>⚡ Next Available Run (अगली बारी में)</span>
+          </label>
+          <label class="timing-radio-opt">
+            <input type="radio" name="timing-mode" value="custom" id="timing-mode-custom">
+            <span>📅 Fix Exact Date &amp; Time (तय तारीख व समय पर)</span>
+          </label>
+        </div>
+
+        <div id="datetime-picker-wrap" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.06);">
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <input type="datetime-local" id="editor-datetime-picker" class="input-field" style="max-width: 270px; font-family: var(--font-mono); font-size: 13px; padding: 8px 12px;">
+            <span id="datetime-local-preview" style="font-size: 11px; font-family: var(--font-mono); color: #93C5FD;">
+              Choose target date &amp; time
+            </span>
+          </div>
+          <p style="font-size: 11px; color: var(--text-subtle); margin-top: 6px;">
+            🔒 यह पोस्ट आपके तय किए गए समय तक कतार में लॉक रहेगी और ठीक उसी समय Threads पर पब्लिश होगी।
+          </p>
+        </div>
       </div>
 
       <!-- Length & Verification Bar -->
@@ -1209,8 +1275,10 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer">
-        <div style="font-size: 11px; color: var(--text-subtle); font-family: var(--font-mono);" id="editor-mode-desc">
-          Mode: Standard Update
+        <div>
+          <button type="button" class="btn btn-secondary" id="btn-delete-post" style="color: #F87171; display: none;" title="Delete this post from queue">
+            🗑️ Delete Post
+          </button>
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
           <button type="button" class="btn btn-secondary" id="btn-cancel-editor">Cancel</button>
@@ -1285,7 +1353,6 @@
       let queueData = [];
       let postsLogData = [];
       let editingQueueIndex = -1; // -1 for new post, >=0 for existing
-      let currentFileSha = null;
 
       // Curated Fallback Posts for 1-Click Replace
       const CURATED_REPLACEMENTS = [
@@ -1327,12 +1394,20 @@
       const btnCloseEditor = document.getElementById('btn-close-editor');
       const btnCancelEditor = document.getElementById('btn-cancel-editor');
       const btnSavePost = document.getElementById('btn-save-post');
+      const btnDeletePost = document.getElementById('btn-delete-post');
       const btnOpenGithubWeb = document.getElementById('btn-open-github-web');
       const editorTextarea = document.getElementById('editor-textarea');
       const editorCharCount = document.getElementById('editor-char-count');
       const editorCharStatus = document.getElementById('editor-char-status');
       const editorModalTitle = document.getElementById('editor-modal-title');
       const editorModalSub = document.getElementById('editor-modal-sub');
+
+      // Schedule Timing DOM
+      const timingModeAuto = document.getElementById('timing-mode-auto');
+      const timingModeCustom = document.getElementById('timing-mode-custom');
+      const datetimePickerWrap = document.getElementById('datetime-picker-wrap');
+      const editorDatetimePicker = document.getElementById('editor-datetime-picker');
+      const datetimeLocalPreview = document.getElementById('datetime-local-preview');
 
       const settingsModal = document.getElementById('settings-modal');
       const btnCloseSettings = document.getElementById('btn-close-settings');
@@ -1432,7 +1507,7 @@
           spotlightContainer.innerHTML = `
             <div class="empty-state">
               No upcoming queue found yet.<br>
-              Click <strong>"➕ Add Custom Post"</strong> or run GitHub Actions to initialize.
+              Click <strong>"➕ Schedule New Post"</strong> or run GitHub Actions to initialize.
             </div>
           `;
           secondaryQueueList.innerHTML = '';
@@ -1447,7 +1522,7 @@
         if (!queue || queue.length === 0) {
           spotlightContainer.innerHTML = `
             <div class="empty-state">
-              Upcoming queue is empty. Click <strong>"➕ Add Custom Post"</strong> to schedule one!
+              Upcoming queue is empty. Click <strong>"➕ Schedule New Post"</strong> to schedule one!
             </div>
           `;
           secondaryQueueList.innerHTML = '';
@@ -1459,12 +1534,26 @@
         const nextCharLen = nextPost.char_count || (nextPost.text ? nextPost.text.length : 0);
         const nextIsValid = nextCharLen >= 300 && nextCharLen <= 350;
         const isCustom = nextPost.customized === true;
+        const hasDateLock = !!nextPost.scheduled_at;
+
+        let dateLockBadge = '';
+        if (hasDateLock) {
+          const diffMs = new Date(nextPost.scheduled_at) - new Date();
+          if (diffMs > 0) {
+            const diffH = Math.floor(diffMs / 3600000);
+            const diffM = Math.floor((diffMs % 3600000) / 60000);
+            dateLockBadge = `<span class="time-lock-badge">🔒 Locked for: ${escapeHtml(nextPost.scheduled_display || nextPost.scheduled_at)} (in ~${diffH}h ${diffM}m)</span>`;
+          } else {
+            dateLockBadge = `<span class="time-lock-badge" style="color: #34D399; background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4);">⚡ Due for Dispatch</span>`;
+          }
+        }
 
         spotlightContainer.innerHTML = `
           <div class="spotlight-card">
             <div class="spotlight-top">
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <span class="spotlight-tag">⚡ NEXT DISPATCH (${escapeHtml(nextPost.scheduled_label || 'Top of the Hour')})</span>
+                <span class="spotlight-tag">⚡ NEXT DISPATCH (${escapeHtml(nextPost.scheduled_label || 'Upcoming Run')})</span>
+                ${dateLockBadge}
                 <span class="status-pill ${isCustom ? 'status-success' : 'status-failed'}" style="background: ${isCustom ? 'rgba(139, 92, 246, 0.15)' : 'rgba(59, 130, 246, 0.15)'}; color: ${isCustom ? '#C084FC' : '#93C5FD'}; border-color: ${isCustom ? 'rgba(139, 92, 246, 0.4)' : 'rgba(59, 130, 246, 0.4)'};">
                   ${isCustom ? '👤 User Customized' : '✨ AI Auto-Draft'}
                 </span>
@@ -1482,14 +1571,14 @@
 
             <div class="spotlight-bottom">
               <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-subtle);">
-                ID: ${escapeHtml(nextPost.id || 'queue_1')} • Slot: NEXT_RUN
+                ID: ${escapeHtml(nextPost.id || 'queue_1')} • ${hasDateLock ? 'Target: Fixed Date/Time' : 'Target: Next Run'}
               </span>
               <div class="spotlight-actions">
                 <button class="btn btn-secondary" onclick="window.replaceWithCurated(0)" style="padding: 7px 12px; font-size: 12px;" title="Replace with another Marc Lou verified masterpiece">
                   🎲 Swap AI Draft
                 </button>
                 <button class="btn btn-primary" onclick="window.openEditorFor(0)" style="padding: 7px 16px; font-size: 12px;">
-                  ✏️ Customize / Edit Post
+                  ✏️ Edit Date/Time &amp; Text
                 </button>
               </div>
             </div>
@@ -1510,6 +1599,15 @@
             const cLen = item.char_count || (item.text ? item.text.length : 0);
             const cValid = cLen >= 300 && cLen <= 350;
             const cCustom = item.customized === true;
+            const isTimeLocked = !!item.scheduled_at;
+
+            let secondaryLock = '';
+            if (isTimeLocked) {
+              const diffMs = new Date(item.scheduled_at) - new Date();
+              const diffH = Math.max(0, Math.floor(diffMs / 3600000));
+              const diffM = Math.max(0, Math.floor((diffMs % 3600000) / 60000));
+              secondaryLock = `<span class="time-lock-badge" style="font-size: 9px; padding: 1px 6px;">🔒 ${escapeHtml(item.scheduled_display || item.scheduled_label)} (${diffH}h ${diffM}m)</span>`;
+            }
 
             return `
               <div class="queue-item-card">
@@ -1520,6 +1618,7 @@
                       ${cLen} chars
                     </span>
                   </div>
+                  ${secondaryLock ? `<div style="margin-bottom: 8px;">${secondaryLock}</div>` : ''}
                   <div class="queue-item-body">${escapeHtml(item.text || '')}</div>
                 </div>
 
@@ -1625,7 +1724,7 @@
               <div class="post-body">${escapeHtml(p.text || 'No post content recorded')}</div>
 
               <div class="post-bottom">
-                <span class="post-id-tag">ID: ${escapeHtml(String(p.id))}</span>
+                <span class="post-id-tag">ID: ${escapeHtml(String(p.id))} ${p.scheduled_time ? `• Target: ${escapeHtml(p.scheduled_time)}` : ''}</span>
                 <span style="font-size: 11px; color: var(--text-subtle); font-family: var(--font-mono);">
                   ${isValidRange ? 'Strict 300-350 Range Verified' : 'Length Flagged'}
                 </span>
@@ -1657,6 +1756,43 @@
 
       updateCountdown();
       setInterval(updateCountdown, 1000);
+
+      // Timing Radio Toggle
+      timingModeAuto.addEventListener('change', () => {
+        if (timingModeAuto.checked) {
+          datetimePickerWrap.style.display = 'none';
+        }
+      });
+
+      timingModeCustom.addEventListener('change', () => {
+        if (timingModeCustom.checked) {
+          datetimePickerWrap.style.display = 'block';
+          if (!editorDatetimePicker.value) {
+            // Default to tomorrow 10:00 AM local
+            const d = new Date();
+            d.setDate(d.getDate() + 1);
+            d.setHours(10, 0, 0, 0);
+            const pad = n => String(n).padStart(2, '0');
+            editorDatetimePicker.value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+          }
+          updateDatetimePreview();
+        }
+      });
+
+      editorDatetimePicker.addEventListener('input', updateDatetimePreview);
+
+      function updateDatetimePreview() {
+        if (!editorDatetimePicker.value) {
+          datetimeLocalPreview.textContent = 'Choose date & time';
+          return;
+        }
+        const d = new Date(editorDatetimePicker.value);
+        if (isNaN(d.getTime())) {
+          datetimeLocalPreview.textContent = 'Invalid date';
+          return;
+        }
+        datetimeLocalPreview.textContent = `📅 ${d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}`;
+      }
 
       // Editor Character Counter Validation
       function updateEditorMeter() {
@@ -1720,8 +1856,22 @@
         if (!item) return;
 
         editorModalTitle.textContent = `Customize Post for ${item.scheduled_label || `Slot #${index + 1}`}`;
-        editorModalSub.textContent = index === 0 ? "This post will be published automatically on the next hourly run." : "This post is lined up in your upcoming schedule.";
+        editorModalSub.textContent = "Edit post content and configure exact release timing.";
         editorTextarea.value = item.text || '';
+        btnDeletePost.style.display = 'inline-flex';
+
+        if (item.scheduled_at) {
+          timingModeCustom.checked = true;
+          datetimePickerWrap.style.display = 'block';
+          const d = new Date(item.scheduled_at);
+          const pad = n => String(n).padStart(2, '0');
+          editorDatetimePicker.value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+          updateDatetimePreview();
+        } else {
+          timingModeAuto.checked = true;
+          datetimePickerWrap.style.display = 'none';
+        }
+
         updateEditorMeter();
         editorModal.classList.add('open');
       };
@@ -1745,8 +1895,8 @@
       // Add Custom Post
       btnAddQueueItem.addEventListener('click', () => {
         editingQueueIndex = -1; // New post
-        editorModalTitle.textContent = "Add Custom Post to Queue";
-        editorModalSub.textContent = "This post will be added to your scheduled lineup.";
+        editorModalTitle.textContent = "Schedule New Custom Post";
+        editorModalSub.textContent = "Write post and pick date & time when it should be published.";
         editorTextarea.value = (
           "✨ I rebuilt my personal health system ✨\n" +
           "It now tracks:\n" +
@@ -1757,6 +1907,18 @@
           "💧 Water: 3L electrolytes\n\n" +
           "What gets measured gets optimized. Guard your body 🧬."
         );
+        btnDeletePost.style.display = 'none';
+
+        // Set default date & time (tomorrow at 10:00 AM)
+        timingModeCustom.checked = true;
+        datetimePickerWrap.style.display = 'block';
+        const d = new Date();
+        d.setDate(d.getDate() + 1);
+        d.setHours(10, 0, 0, 0);
+        const pad = n => String(n).padStart(2, '0');
+        editorDatetimePicker.value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        updateDatetimePreview();
+
         updateEditorMeter();
         editorModal.classList.add('open');
       });
@@ -1768,6 +1930,20 @@
       }
       btnCloseEditor.addEventListener('click', closeEditor);
       btnCancelEditor.addEventListener('click', closeEditor);
+
+      // Delete Post from Queue
+      btnDeletePost.addEventListener('click', async () => {
+        if (editingQueueIndex >= 0 && queueData[editingQueueIndex]) {
+          if (!confirm("Are you sure you want to remove this post from your upcoming schedule?")) {
+            return;
+          }
+          queueData.splice(editingQueueIndex, 1);
+          renderQueue(queueData);
+          closeEditor();
+          showToast("Post deleted from queue.", "🗑️");
+          await saveQueueToRemote();
+        }
+      });
 
       // Save Post from Editor
       btnSavePost.addEventListener('click', async () => {
@@ -1784,10 +1960,33 @@
           }
         }
 
+        // Determine Timing Mode
+        let scheduledAtIso = null;
+        let scheduledDisplayStr = null;
+        let scheduledLabel = "Next Hourly Run";
+
+        if (timingModeCustom.checked) {
+          if (!editorDatetimePicker.value) {
+            alert("Please pick a valid Date and Time for the custom schedule.");
+            return;
+          }
+          const chosenDate = new Date(editorDatetimePicker.value);
+          if (isNaN(chosenDate.getTime())) {
+            alert("Invalid date format selected.");
+            return;
+          }
+          scheduledAtIso = chosenDate.toISOString();
+          scheduledDisplayStr = chosenDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+          scheduledLabel = `📅 ${scheduledDisplayStr}`;
+        }
+
         if (editingQueueIndex >= 0 && queueData[editingQueueIndex]) {
           queueData[editingQueueIndex].text = text;
           queueData[editingQueueIndex].char_count = len;
           queueData[editingQueueIndex].customized = true;
+          queueData[editingQueueIndex].scheduled_at = scheduledAtIso;
+          queueData[editingQueueIndex].scheduled_display = scheduledDisplayStr;
+          queueData[editingQueueIndex].scheduled_label = scheduledLabel;
           queueData[editingQueueIndex].updated_at = new Date().toISOString();
         } else {
           // New Queue Item
@@ -1797,15 +1996,27 @@
             text: text,
             char_count: len,
             customized: true,
+            scheduled_at: scheduledAtIso,
+            scheduled_display: scheduledDisplayStr,
+            scheduled_label: scheduledLabel,
             slot: `SLOT_${newIdx}`,
-            scheduled_label: `Run +${newIdx - 1} Hours`,
             created_at: new Date().toISOString()
           });
         }
 
+        // Re-sort queue so time-locked posts are ordered logically
+        queueData.sort((a, b) => {
+          if (a.scheduled_at && b.scheduled_at) {
+            return new Date(a.scheduled_at) - new Date(b.scheduled_at);
+          }
+          if (a.scheduled_at && !b.scheduled_at) return 1;
+          if (!a.scheduled_at && b.scheduled_at) return -1;
+          return 0;
+        });
+
         renderQueue(queueData);
         closeEditor();
-        showToast("Queue updated. Saving changes...");
+        showToast("Post scheduled successfully! Saving to cloud...");
         await saveQueueToRemote();
       });
 
@@ -1844,7 +2055,7 @@
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              message: "chore(queue): customize upcoming scheduled post [skip ci]",
+              message: "chore(queue): schedule and customize upcoming post [skip ci]",
               content: encodedContent,
               sha: sha || undefined
             })
@@ -1855,7 +2066,7 @@
             throw new Error(errData.message || `HTTP ${putRes.status}`);
           }
 
-          showToast("Committed to GitHub! Next run will publish your post.", "✓");
+          showToast("Committed to GitHub! Scheduled date & time locked.", "✓");
         } catch (err) {
           console.error("[GITHUB COMMIT ERROR]", err);
           showToast(`Save to GitHub failed: ${err.message}`, "⚠");
