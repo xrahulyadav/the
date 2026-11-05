@@ -2,18 +2,18 @@
 """
 Instagram Threads Auto-Posting Engine (Pure GitHub Actions Automation)
 ======================================================================
-- Repository: xrahulyadav/the
+- Style: Line-by-line modern founder / biohacker aesthetic (Marc Lou style)
 - Engine: Google Gemini AI (gemini-2.5-flash with gemini-3.8-flash fallback)
 - Hard constraint: STRICTLY between 300 and 350 total characters with emojis
 - Publishing: 2-step Meta Threads Graph API container creation & publishing
 - Target: Threads User ID 29410042778679242
 - Persistence: Updates posts_log.json for GitHub Pages static dashboard consumption
-- Triggered automatically via GitHub Actions Cron (every 1 hour) or manual dispatch
 """
 
 import datetime
 import json
 import os
+import random
 import re
 import sys
 from pathlib import Path
@@ -40,154 +40,151 @@ BASE_DIR = Path(__file__).resolve().parent
 LOG_FILE = BASE_DIR / "posts_log.json"
 
 # Credentials from Environment (injected by GitHub Repository Secrets or local .env)
-GEMINI_API_KEY = os.getenv(
-    "GEMINI_API_KEY",
-    "AQ.Ab8RN6I59zPQiFLybXc1VYlQxoMy0BLl2zASfKMoEVakXgzzwQ"
-).strip()
-
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash").strip()
-
-THREADS_ACCESS_TOKEN = os.getenv(
-    "THREADS_ACCESS_TOKEN",
-    "THAAUSRZBZAQCjhBYmFpWVYxcTIyR05SYXBYNktPcUcwSkhVTzZAndFdBOWJ4Y0NoT3lUU1ctV2ZAzeU5PSHNtTXducFhXdExETWNYbVAzTEtxMHlJNEc1VVN1VVBaakVuRzJaZAnVsLVFVcEUxU0I5SXQzUVJROGtwMHB0NFg5dEgxOWNBd1UwbWR1b3FUWGxFTERZANk5lQy1COXNaekJhM3FsOVpvaEdUMzgZD"
-).strip()
-
+THREADS_ACCESS_TOKEN = os.getenv("THREADS_ACCESS_TOKEN", "").strip()
 THREADS_USER_ID = os.getenv("THREADS_USER_ID", "29410042778679242").strip()
 
-# Evidence-based Health, Longevity & Wellness Topics
-WELLNESS_TOPICS = [
-    "Zone 2 cardiovascular training, mitochondrial biogenesis, and metabolic flexibility",
-    "Circadian biology, morning solar photon exposure, and cortisol awakening rhythm",
-    "Creatine monohydrate beyond muscle: neuroprotection and cerebral ATP recycling",
-    "Slow-wave sleep architecture, glymphatic fluid brain clearance, and growth hormone release",
-    "Gut microbiota diversity, short-chain fatty acids (SCFAs), and intestinal mucosal barrier",
-    "Magnesium L-threonate vs Glycinate for NMDA receptor modulation and deep nervous system recovery",
-    "Resistance training as metabolic medicine: GLUT4 translocation and insulin sensitivity",
-    "Cellular hydration: the sodium-potassium ATPase pump beyond pure tap water volume",
-    "Heat shock proteins (HSP70) from infrared sauna therapy and cardiovascular longevity markers",
-    "Cold water immersion: dopamine receptor density and noradrenaline release kinetics",
-    "Omega-3 fatty acids (EPA/DHA), membrane fluidity, and systemic endothelial health",
-    "Chronic low-grade stress: the cortisol-DHEA ratio and neuroplasticity preservation",
-    "Intermittent fasting autophagy triggers and cellular senescent clearance benchmarks",
-    "VO2 Max as the single strongest functional biomarker for longevity and biological age",
-    "Vagus nerve stimulation, heart rate variability (HRV), and parasympathetic recovery",
-    "Phytonutrient diversity: polyphenols, sulforaphane Nrf2 activation, and oxidative resilience",
-    "Deep REM sleep cycles, memory consolidation, and prefrontal amygdala emotional calibration",
-    "Postprandial glucose blunting: soleus pushups and 10-minute light walking kinetics"
+# Curated High-Converting Line-by-Line Founder Posts (Marc Lou Style)
+# All strictly between 300 and 350 characters total
+CURATED_FOUNDER_POSTS = [
+    (
+        "✨ Daily Biohacking Protocol ✨\n\n"
+        "What 90 days of science-backed habits did:\n"
+        "🩺 Deep Sleep: +38 mins slow-wave recovery\n"
+        "🧠 Focus: Zero afternoon brain fog crashes\n"
+        "🏃 Zone 2: Mitochondrial density doubled\n"
+        "🥑 Gut Health: 30+ diverse plant fibers weekly\n\n"
+        "Your biology reflects what you do daily. Prioritize vitality 🧬."
+    ),
+    (
+        "⚡ My 5 Non-Negotiable Longevity Rules ⚡\n\n"
+        "How I keep my biological age 7 years younger:\n"
+        "☀️ Morning: 15 mins direct solar photons\n"
+        "💧 Hydration: Sodium + potassium cellular pump\n"
+        "🏃 Cardio: 150 mins weekly conversational Zone 2\n"
+        "💤 Evening: Zero blue photons 90m before bed\n\n"
+        "Consistency compounds into extraordinary vitality 🧬."
+    ),
+    (
+        "✨ The High-Performance Health Stack ✨\n\n"
+        "What I track daily to stay sharp at 100%:\n"
+        "🧠 Brain: Magnesium L-threonate for NMDA clarity\n"
+        "🥑 Nutrition: 40g protein pulses every 4 hours\n"
+        "⚡ Energy: Heat shock proteins via 20m sauna\n"
+        "💤 Recovery: 8.2 hours slow-wave sleep score\n\n"
+        "Take care of your cells, mind handles the rest 🧬."
+    ),
+    (
+        "🩺 Rebuilding My Baseline Vitality 🩺\n\n"
+        "The routine that transformed my biomarkers:\n"
+        "☀️ 07:00 AM: Retinal solar photons + hydration 💧\n"
+        "🏃 12:00 PM: 30m resistance training & GLUT4\n"
+        "🧠 03:00 PM: Cold thermogenesis dopamine spike\n"
+        "💤 10:30 PM: Glymphatic fluid clearance mode\n\n"
+        "Small biological inputs create massive life leverage ⚡."
+    ),
+    (
+        "✨ How I Optimized My Energy Engine ✨\n\n"
+        "My daily physiological biomarkers checklist:\n"
+        "⚡ Cellular ATP: 5g creatine monohydrate\n"
+        "💧 Electrolytes: 500mg sodium in morning water\n"
+        "🏃 Mitochondria: 45m conversational Zone 2 cardio\n"
+        "💤 Recovery: 65°F cool room for deep REM sleep\n\n"
+        "Daily micro-habits yield exponential vitality 🧬."
+    ),
+    (
+        "🧠 Upgrading Cerebral Metabolism 🧠\n\n"
+        "How I eliminated mental fatigue completely:\n"
+        "☀️ Sunlight: Cortisol awakening pulse at 7 AM\n"
+        "💧 Hydration: Celtic sea salt + magnesium glycinate\n"
+        "🏃 Movement: 10m post-meal glucose walking\n"
+        "💤 Sleep: Consistent circadian sleep architecture\n\n"
+        "Protect your cognitive hardware every single day ⚡."
+    ),
+    (
+        "✨ The Founder Cellular Longevity Stack ✨\n\n"
+        "How I maintain peak stamina building daily:\n"
+        "🩺 Recovery: HRV tracking & vagus nerve stimulation\n"
+        "🥑 Fuel: Whole foods & polyphenol diversity\n"
+        "🏃 Training: Heavy compound lifts & Zone 2 cardio\n"
+        "💤 Rest: 8 hours restorative deep sleep cycles\n\n"
+        "Your health is your greatest compounding asset 🧬."
+    )
 ]
 
-SYSTEM_PROMPT = """You are an elite health scientist, longevity physician, and wellness researcher writing for Instagram Threads.
-Your objective is to produce insightful, science-backed micro-insights on Health, Fitness, Nutrition, or Mental Wellness.
+SYSTEM_PROMPT = """You are an elite health founder and biohacking researcher writing high-engagement posts for Instagram Threads in the viral style of Marc Lou and Andrew Huberman.
 
-EMOJI STYLE:
-Include 2 to 4 tasteful, engaging, and relevant emojis (e.g. 🧬, ⚡, 🥑, 🧠, 🏃, 💤, ☀️, 💧) naturally placed within the post to maximize engagement on Threads.
+FORMAT REQUIREMENTS (LINE-BY-LINE AESTHETIC):
+Structure the post cleanly across multiple lines:
+Line 1: Punchy, curiosity-driven header with emojis (e.g. ✨ The Daily Longevity Protocol ✨)
+Line 2: Blank line
+Line 3: Short context line (e.g. What tracking my health biomarkers revealed:)
+Lines 4-7: Crisp, bulleted takeaways with emoji bullets (🩺, 🧠, 🏃, 🥑, ⚡, 💤, ☀️, 💧)
+Line 8: Blank line
+Line 9: Punchy concluding takeaway on daily compounding biological habits.
 
 CRITICAL HARD CONSTRAINT (NON-NEGOTIABLE):
-The total length of the entire output MUST BE STRICTLY BETWEEN 300 AND 350 TOTAL CHARACTERS.
-Every single letter, number, space, emoji, and punctuation mark is counted.
+The total length of the entire output MUST BE STRICTLY BETWEEN 300 AND 350 TOTAL CHARACTERS (including letters, spaces, emojis, and newlines).
 - NEVER output less than 300 characters.
 - NEVER output more than 350 characters.
-- Return ONLY the exact post text with emojis. Zero hashtags. Zero surrounding quotes. Zero conversational preamble.
+- Zero hashtags. Zero surrounding quotes. Zero conversational preamble.
 """
 
 
 def enforce_exact_char_range(text: str, min_chars: int = 300, max_chars: int = 350) -> str:
     """
-    Guarantees text strictly satisfies min_chars <= len <= max_chars.
-    Employs smart boundary trimming or complementary scientific takeaways.
+    Guarantees line-by-line formatting strictly satisfies 300 <= len <= 350.
+    Never resorts to repetitive emoji spam.
     """
     cleaned = text.strip().strip('"\'“”')
-    cleaned = re.sub(r'\s+', ' ', cleaned)
     length = len(cleaned)
 
     if min_chars <= length <= max_chars:
         return cleaned
 
-    # Exceeding max_chars (350): Smart trim at sentence or word boundary
+    # If exceeding max_chars, trim at last sentence boundary or select curated post
     if length > max_chars:
-        sentences = re.split(r'([.!?]\s+)', cleaned)
-        reconstructed = ""
-        for i in range(0, len(sentences), 2):
-            sentence = sentences[i]
-            punct = sentences[i+1] if i+1 < len(sentences) else ""
-            candidate = (reconstructed + sentence + punct).strip()
-            if min_chars <= len(candidate) <= max_chars:
-                return candidate
-            if len(candidate) > max_chars:
-                break
-            reconstructed = candidate + " "
-
-        words = cleaned.split()
+        # Try trimming trailing text to fit
+        lines = cleaned.split("\n")
         trimmed = ""
-        for w in words:
-            candidate = (trimmed + " " + w).strip() if trimmed else w
-            if len(candidate) > (max_chars - 5):
+        for line in lines:
+            candidate = (trimmed + "\n" + line).strip() if trimmed else line
+            if len(candidate) <= max_chars:
+                trimmed = candidate
+            else:
                 break
-            trimmed = candidate
+        if min_chars <= len(trimmed) <= max_chars:
+            return trimmed
 
-        trimmed = trimmed.rstrip(" ,;:-") + ". 🧬"
-        if len(trimmed) > max_chars:
-            trimmed = trimmed[:max_chars - 3].rstrip() + "..."
-        if len(trimmed) < min_chars:
-            pad = " Prioritize vitality and daily consistency ⚡."
-            trimmed = (trimmed + pad)[:max_chars]
-        return trimmed
-
-    # Below min_chars (300): Complement with evidence-backed health takeaways
-    takeaways = [
-        " Daily micro-habits compound into extraordinary vitality 🧬. Prioritize recovery, hydration, and movement every day.",
-        " Sustainable longevity is forged through consistent daily biological rhythms and intentional cellular rest ⚡.",
-        " Small daily health interventions yield exponential cellular protection and mental clarity over time 🧠.",
-        " Optimize your daily physiological inputs: deep hydration, sunlight, and restorative sleep architecture 💤.",
-        " Consistent physical movement primes cerebral circulation and sustains cellular metabolic flexibility 🏃."
-    ]
-
-    for take in takeaways:
-        candidate = (cleaned.rstrip('.') + '.' + take).strip()
-        if min_chars <= len(candidate) <= max_chars:
-            return candidate
-
-    candidate = cleaned + " Maintain consistency and optimal vitality 🧬."
-    if len(candidate) > max_chars:
-        candidate = candidate[:max_chars]
-    while len(candidate) < min_chars:
-        candidate += " ⚡"
-    return candidate[:max_chars]
+    # If below min_chars or trimming broke structure, return one of our curated line-by-line posts
+    return random.choice(CURATED_FOUNDER_POSTS)
 
 
 def generate_wellness_insight() -> str:
-    """Generate high-impact health micro-article using Gemini AI."""
-    import random
-    topic = random.choice(WELLNESS_TOPICS)
-
-    user_prompt = (
-        f"Generate an insightful, science-backed post on: {topic}.\n"
-        f"Include 2 to 3 engaging, relevant emojis (e.g. 🧬, ⚡, 🥑, 🧠, 🏃, 💤, ☀️, 💧).\n"
-        f"MANDATORY RULE: The total text length (including letters, spaces, emojis) "
-        f"MUST BE STRICTLY BETWEEN 300 AND 350 CHARACTERS. Target ~325 characters."
-    )
-
-    if not GEMINI_API_KEY:
-        print("[AI CORE WARN] GEMINI_API_KEY secret not found in environment. Using curated benchmark insight.")
-        return enforce_exact_char_range(
-            "Zone 2 cardio trains mitochondrial density and metabolic flexibility 🏃. By maintaining a conversational pace (60-70% max heart rate), muscle cells optimize fatty acid oxidation over glycogen reliance ⚡. 150 minutes weekly reduces all-cause mortality and bolsters daily endurance 🧬. Consistency compounds your cellular health."
-        )
+    """Generate high-impact health micro-article in line-by-line founder format."""
+    if not GEMINI_API_KEY or not GEMINI_API_KEY.startswith("AIzaSy"):
+        print("[AI CORE] Gemini API Key unconfigured or non-AIStudio format. Using curated Marc Lou line-by-line post.")
+        return random.choice(CURATED_FOUNDER_POSTS)
 
     try:
         from google import genai
         from google.genai import types
         client = genai.Client(api_key=GEMINI_API_KEY)
     except Exception as e:
-        print(f"[AI CORE ERROR] Could not initialize google-genai client: {e}")
-        return enforce_exact_char_range(
-            "Consistent physical movement and daily sunlight regulate your master biological clock ☀️. By aligning circadian rhythms, your brain optimizes neurogenesis, deep slow-wave sleep cycles, and cellular repair pathways 🧠. Small daily interventions create lasting systemic resilience and functional vitality 🧬."
-        )
+        print(f"[AI CORE ERROR] Client init error: {e}. Using curated line-by-line post.")
+        return random.choice(CURATED_FOUNDER_POSTS)
+
+    user_prompt = (
+        "Write a line-by-line founder biohacking post for Instagram Threads.\n"
+        "Include a header with emojis, 4 bullet lines (🩺, 🧠, 🏃, 🥑), and a closing takeaway.\n"
+        "MANDATORY: Total length MUST BE STRICTLY BETWEEN 300 AND 350 CHARACTERS."
+    )
 
     model_candidates = [GEMINI_MODEL, "gemini-2.5-flash", "gemini-3.8-flash", "gemini-1.5-flash"]
     seen = set()
     model_candidates = [m for m in model_candidates if m and not (m in seen or seen.add(m))]
 
-    candidate = ""
     for model_name in model_candidates:
         try:
             print(f"[AI CORE] Querying Gemini model: {model_name}...")
@@ -197,24 +194,25 @@ def generate_wellness_insight() -> str:
                 config=types.GenerateContentConfig(
                     system_instruction=SYSTEM_PROMPT,
                     temperature=0.7,
-                    max_output_tokens=160
+                    max_output_tokens=180
                 )
             )
             raw = (response.text or "").strip().strip('"\'“”')
             raw = re.sub(r'#\w+', '', raw).strip()
 
             if 300 <= len(raw) <= 350:
-                print(f"[AI CORE SUCCESS] Valid post generated with {model_name} ({len(raw)} chars).")
+                print(f"[AI CORE SUCCESS] Valid line-by-line post generated ({len(raw)} chars).")
                 return raw
 
-            candidate = raw
-            print(f"[AI CORE] Output from {model_name} is {len(raw)} chars. Enforcing bounds.")
-            break
+            print(f"[AI CORE] Output from {model_name} is {len(raw)} chars. Validating bounds.")
+            candidate = enforce_exact_char_range(raw)
+            if 300 <= len(candidate) <= 350:
+                return candidate
         except Exception as e:
-            print(f"[AI CORE WARN] Model {model_name} returned: {e}. Trying next candidate...")
+            print(f"[AI CORE WARN] Model {model_name} error: {e}")
             continue
 
-    return enforce_exact_char_range(candidate or f"{topic} is fundamental for human vitality and long-term metabolic health.")
+    return random.choice(CURATED_FOUNDER_POSTS)
 
 
 def publish_to_threads(text: str) -> Tuple[str, Optional[str], Optional[str]]:
@@ -224,9 +222,8 @@ def publish_to_threads(text: str) -> Tuple[str, Optional[str], Optional[str]]:
       Step B: POST /{user_id}/threads_publish (Publishes Media Container)
     """
     if not THREADS_ACCESS_TOKEN or not THREADS_USER_ID:
-        print("[THREADS API WARN] Missing THREADS_ACCESS_TOKEN or THREADS_USER_ID. Generating simulated record.")
-        mock_id = f"mock_{int(datetime.datetime.now().timestamp())}"
-        return "SUCCESS", mock_id, f"https://www.threads.net/post/{mock_id}"
+        print("[THREADS API WARN] Missing THREADS_ACCESS_TOKEN or THREADS_USER_ID.")
+        return "FAILED", None, "Missing THREADS_ACCESS_TOKEN or THREADS_USER_ID in GitHub Secrets."
 
     base_url = f"https://graph.threads.net/v1.0/{THREADS_USER_ID}"
 
@@ -310,11 +307,13 @@ def main():
     print(f" Time: {utc_now.strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print("=" * 65)
 
-    # 1. Generate micro-article via Gemini
+    # 1. Generate line-by-line micro-article
     post_text = generate_wellness_insight()
     char_len = len(post_text)
     print(f"[AI GENERATOR] Generated post ({char_len} chars):")
-    print(f"\"{post_text}\"")
+    print("-" * 50)
+    print(post_text)
+    print("-" * 50)
 
     # 2. Publish to Instagram Threads Graph API
     status, post_id, detail = publish_to_threads(post_text)
