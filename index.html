@@ -31,6 +31,7 @@
       --accent-blue: #3B82F6;
       --accent-blue-glow: rgba(59, 130, 246, 0.3);
       --accent-purple: #8B5CF6;
+      --accent-purple-glow: rgba(139, 92, 246, 0.3);
       --accent-amber: #F59E0B;
       --accent-red: #EF4444;
 
@@ -67,7 +68,7 @@
       transform: translateX(-50%);
       width: 1000px;
       height: 500px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.04) 50%, transparent 70%);
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, rgba(59, 130, 246, 0.06) 40%, rgba(16, 185, 129, 0.03) 70%, transparent 80%);
       pointer-events: none;
       z-index: 0;
       filter: blur(100px);
@@ -229,7 +230,6 @@
       z-index: 1;
     }
 
-    /* Header */
     header {
       display: flex;
       justify-content: space-between;
@@ -492,6 +492,83 @@
       border-radius: 999px;
     }
 
+    .schedule-category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* ==========================================================================
+       CUSTOM SCHEDULED POST CARDS (GLOWING TARGET DATE & TICKING COUNTDOWN)
+       ========================================================================== */
+    .custom-scheduled-card {
+      background: linear-gradient(145deg, rgba(139, 92, 246, 0.09) 0%, rgba(59, 130, 246, 0.05) 50%, rgba(255, 255, 255, 0.02) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.45);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 18px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 24px rgba(139, 92, 246, 0.1);
+      transition: all 0.3s var(--ease-apple);
+    }
+
+    .custom-scheduled-card:hover {
+      border-color: rgba(139, 92, 246, 0.7);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 32px rgba(139, 92, 246, 0.18);
+      transform: translateY(-2px);
+    }
+
+    .scheduled-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .scheduled-date-highlight {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .scheduled-date-highlight .cal-icon {
+      font-size: 24px;
+      background: rgba(139, 92, 246, 0.18);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+    }
+
+    .live-countdown-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      padding: 6px 14px;
+      border-radius: 10px;
+    }
+
+    .empty-custom-banner {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 22px 26px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
     /* Spotlight Card */
     .spotlight-card {
       background: linear-gradient(145deg, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.05) 50%, rgba(255, 255, 255, 0.02) 100%);
@@ -694,7 +771,6 @@
       gap: 16px;
     }
 
-    /* Post Card */
     .post-card {
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(255, 255, 255, 0.06);
@@ -1173,24 +1249,56 @@
       <div class="section-header">
         <div class="section-title">
           <span>🎯</span>
-          <span>Upcoming Scheduled Posts (अगली पोस्ट व कतार)</span>
+          <span>Post Schedule Manager (शेड्यूल व कतार प्रबंधक)</span>
           <span class="badge-count" id="queue-count-badge">0</span>
         </div>
         <div class="header-actions">
-          <button class="btn btn-secondary" id="btn-add-queue-item" style="padding: 6px 14px; font-size: 12px;">
+          <button class="btn btn-primary" id="btn-add-queue-item" style="padding: 8px 18px; font-size: 13px;">
             ➕ Schedule New Post (तारीख व समय तय करें)
           </button>
         </div>
       </div>
 
-      <!-- Spotlight: The Very Next Post -->
+      <!-- SECTION 1: MY CUSTOM SCHEDULED POSTS (DEDICATED CARDS WITH TARGET DATE & TICKING COUNTDOWN) -->
+      <div class="schedule-category-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 16px;">📅</span>
+          <span style="font-weight: 700; font-size: 14px; letter-spacing: -0.01em; color: #FFFFFF;">
+            My Custom Scheduled Posts (मेरी तय की गई तारीख व समय वाली पोस्ट्स)
+          </span>
+          <span class="badge-count" id="custom-scheduled-count-badge" style="background: rgba(139, 92, 246, 0.2); color: #C084FC;">0</span>
+        </div>
+        <span style="font-size: 11px; color: var(--text-subtle); font-family: var(--font-mono);">
+          Time-Locked: Posts only on your chosen Date &amp; Time
+        </span>
+      </div>
+
+      <!-- Container for Custom Scheduled Posts -->
+      <div id="custom-scheduled-container">
+        <!-- Rendered dynamically via JS -->
+      </div>
+
+      <!-- SECTION 2: HOURLY AUTO-PILOT QUEUE -->
+      <div class="schedule-category-header" style="border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 26px; margin-top: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 16px;">⚡</span>
+          <span style="font-weight: 700; font-size: 14px; letter-spacing: -0.01em; color: #FFFFFF;">
+            Hourly Auto-Pilot Queue (हर घंटे ऑटोमैटिक पोस्ट होने वाली कतार)
+          </span>
+        </div>
+        <span style="font-size: 11px; color: var(--text-subtle); font-family: var(--font-mono);">
+          Next dispatch at top of the hour (:00)
+        </span>
+      </div>
+
+      <!-- Spotlight: The Very Next Hourly Post -->
       <div id="spotlight-container">
         <div class="empty-state">Loading upcoming queue from upcoming_queue.json...</div>
       </div>
 
       <!-- Secondary Queue Items -->
-      <div style="margin: 28px 0 14px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-subtle); display: flex; align-items: center; gap: 8px;">
-        <span>SCHEDULED QUEUE LINEUP (आगे के शेड्यूल्ड पोस्ट्स)</span>
+      <div style="margin: 20px 0 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-subtle); display: flex; align-items: center; gap: 8px;">
+        <span>SUBSEQUENT AUTO SLOTS (आगे के स्लॉट्स)</span>
         <span style="height: 1px; flex: 1; background: rgba(255, 255, 255, 0.06);"></span>
       </div>
       <div class="queue-grid" id="secondary-queue-list">
@@ -1378,6 +1486,8 @@
       const statLengthCompliance = document.getElementById('stat-length-compliance');
 
       const queueCountBadge = document.getElementById('queue-count-badge');
+      const customScheduledCountBadge = document.getElementById('custom-scheduled-count-badge');
+      const customScheduledContainer = document.getElementById('custom-scheduled-container');
       const spotlightContainer = document.getElementById('spotlight-container');
       const secondaryQueueList = document.getElementById('secondary-queue-list');
       const logsFeed = document.getElementById('logs-feed');
@@ -1511,49 +1621,114 @@
             </div>
           `;
           secondaryQueueList.innerHTML = '';
+          customScheduledContainer.innerHTML = '';
           queueCountBadge.textContent = '0';
+          customScheduledCountBadge.textContent = '0';
         }
       }
 
-      // Render Queue Section
+      // Render Queue Section (Separates Custom Date/Time Schedules from Hourly Auto-Queue)
       function renderQueue(queue) {
         queueCountBadge.textContent = queue.length;
 
-        if (!queue || queue.length === 0) {
+        // 1. Separate custom time-locked posts and auto posts
+        const customItems = [];
+        const autoItems = [];
+
+        queue.forEach((item, originalIndex) => {
+          if (item.scheduled_at) {
+            customItems.push({ item, originalIndex });
+          } else {
+            autoItems.push({ item, originalIndex });
+          }
+        });
+
+        customScheduledCountBadge.textContent = customItems.length;
+
+        // 2. Render Custom Scheduled Posts
+        if (customItems.length === 0) {
+          customScheduledContainer.innerHTML = `
+            <div class="empty-custom-banner">
+              <span style="font-size: 26px;">📅</span>
+              <div style="flex: 1;">
+                <div style="font-size: 14px; font-weight: 600; color: #FFFFFF;">कोई तारीख या समय फिक्स नहीं किया गया है</div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                  अगर आप चाहते हैं कि कोई खास पोस्ट किसी खास तारीख और समय पर ही जाए, तो <strong>"➕ Schedule New Post"</strong> पर क्लिक करके तय करें।
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          customScheduledContainer.innerHTML = customItems.map(({ item, originalIndex }) => {
+            const charLen = item.char_count || (item.text ? item.text.length : 0);
+            const isValid = charLen >= 300 && charLen <= 350;
+            const targetDateStr = item.scheduled_display || (item.scheduled_at ? new Date(item.scheduled_at).toLocaleString() : 'Fixed Schedule');
+
+            return `
+              <div class="custom-scheduled-card">
+                <div class="scheduled-header-bar">
+                  <div class="scheduled-date-highlight">
+                    <span class="cal-icon">📅</span>
+                    <div>
+                      <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #93C5FD;">TARGET PUBLISH DATE &amp; TIME (तय तारीख व समय)</div>
+                      <div style="font-size: 16px; font-weight: 700; color: #FFFFFF; font-family: var(--font-mono); margin-top: 2px;">${escapeHtml(targetDateStr)}</div>
+                    </div>
+                  </div>
+                  <div class="live-countdown-pill">
+                    <span class="pulse-dot" style="background: #34D399; box-shadow: 0 0 8px #34D399;"></span>
+                    <span style="font-size: 11px; color: var(--text-muted);">POSTING IN:</span>
+                    <span class="ticking-timer" data-target="${escapeHtml(item.scheduled_at)}" style="font-size: 14px; font-weight: 700; color: #34D399; font-family: var(--font-mono);">
+                      Calculating...
+                    </span>
+                  </div>
+                </div>
+
+                <div class="spotlight-body" style="margin: 16px 0;">${escapeHtml(item.text || '')}</div>
+
+                <div class="spotlight-bottom">
+                  <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <span class="char-badge ${isValid ? 'valid' : 'invalid'}">${charLen} chars (300-350 limit)</span>
+                    <span class="time-lock-badge">🔒 Locked until chosen time</span>
+                    <span style="font-size: 11px; color: var(--text-subtle); font-family: var(--font-mono);">ID: ${escapeHtml(item.id || '')}</span>
+                  </div>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-secondary" onclick="window.openEditorFor(${originalIndex})" style="padding: 6px 14px; font-size: 12px;">
+                      ✏️ Edit Date &amp; Text
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.deleteQueueItem(${originalIndex})" style="padding: 6px 14px; font-size: 12px; color: #F87171;" title="Cancel this scheduled post">
+                      🗑️ Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // 3. Render Hourly Auto Queue
+        if (autoItems.length === 0) {
           spotlightContainer.innerHTML = `
             <div class="empty-state">
-              Upcoming queue is empty. Click <strong>"➕ Schedule New Post"</strong> to schedule one!
+              No hourly auto-cycle posts. Next run will generate one autonomously.
             </div>
           `;
           secondaryQueueList.innerHTML = '';
           return;
         }
 
-        // 1. Featured Spotlight: First Item (Next Scheduled Post)
-        const nextPost = queue[0];
+        // Spotlight: First Auto Item
+        const firstAuto = autoItems[0];
+        const nextPost = firstAuto.item;
+        const nextOrigIdx = firstAuto.originalIndex;
         const nextCharLen = nextPost.char_count || (nextPost.text ? nextPost.text.length : 0);
         const nextIsValid = nextCharLen >= 300 && nextCharLen <= 350;
         const isCustom = nextPost.customized === true;
-        const hasDateLock = !!nextPost.scheduled_at;
-
-        let dateLockBadge = '';
-        if (hasDateLock) {
-          const diffMs = new Date(nextPost.scheduled_at) - new Date();
-          if (diffMs > 0) {
-            const diffH = Math.floor(diffMs / 3600000);
-            const diffM = Math.floor((diffMs % 3600000) / 60000);
-            dateLockBadge = `<span class="time-lock-badge">🔒 Locked for: ${escapeHtml(nextPost.scheduled_display || nextPost.scheduled_at)} (in ~${diffH}h ${diffM}m)</span>`;
-          } else {
-            dateLockBadge = `<span class="time-lock-badge" style="color: #34D399; background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4);">⚡ Due for Dispatch</span>`;
-          }
-        }
 
         spotlightContainer.innerHTML = `
           <div class="spotlight-card">
             <div class="spotlight-top">
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <span class="spotlight-tag">⚡ NEXT DISPATCH (${escapeHtml(nextPost.scheduled_label || 'Upcoming Run')})</span>
-                ${dateLockBadge}
+                <span class="spotlight-tag">⚡ NEXT DISPATCH (${escapeHtml(nextPost.scheduled_label || 'Top of the Hour')})</span>
                 <span class="status-pill ${isCustom ? 'status-success' : 'status-failed'}" style="background: ${isCustom ? 'rgba(139, 92, 246, 0.15)' : 'rgba(59, 130, 246, 0.15)'}; color: ${isCustom ? '#C084FC' : '#93C5FD'}; border-color: ${isCustom ? 'rgba(139, 92, 246, 0.4)' : 'rgba(59, 130, 246, 0.4)'};">
                   ${isCustom ? '👤 User Customized' : '✨ AI Auto-Draft'}
                 </span>
@@ -1571,13 +1746,13 @@
 
             <div class="spotlight-bottom">
               <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-subtle);">
-                ID: ${escapeHtml(nextPost.id || 'queue_1')} • ${hasDateLock ? 'Target: Fixed Date/Time' : 'Target: Next Run'}
+                ID: ${escapeHtml(nextPost.id || 'queue_1')} • Slot: NEXT_RUN
               </span>
               <div class="spotlight-actions">
-                <button class="btn btn-secondary" onclick="window.replaceWithCurated(0)" style="padding: 7px 12px; font-size: 12px;" title="Replace with another Marc Lou verified masterpiece">
+                <button class="btn btn-secondary" onclick="window.replaceWithCurated(${nextOrigIdx})" style="padding: 7px 12px; font-size: 12px;" title="Replace with another Marc Lou verified masterpiece">
                   🎲 Swap AI Draft
                 </button>
-                <button class="btn btn-primary" onclick="window.openEditorFor(0)" style="padding: 7px 16px; font-size: 12px;">
+                <button class="btn btn-primary" onclick="window.openEditorFor(${nextOrigIdx})" style="padding: 7px 16px; font-size: 12px;">
                   ✏️ Edit Date/Time &amp; Text
                 </button>
               </div>
@@ -1585,40 +1760,29 @@
           </div>
         `;
 
-        // 2. Secondary Queue Items (Run +1, Run +2, etc.)
-        const secondary = queue.slice(1);
-        if (secondary.length === 0) {
+        // Secondary Auto Items
+        const secondaryAuto = autoItems.slice(1);
+        if (secondaryAuto.length === 0) {
           secondaryQueueList.innerHTML = `
             <div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--text-subtle); font-size: 12px; font-family: var(--font-mono);">
-              No additional queued posts. (The system auto-refills up to 3 slots on next run).
+              No additional queued auto slots. (The system auto-refills up to 3 slots on next run).
             </div>
           `;
         } else {
-          secondaryQueueList.innerHTML = secondary.map((item, relIdx) => {
-            const actualIdx = relIdx + 1;
+          secondaryQueueList.innerHTML = secondaryAuto.map(({ item, originalIndex }, relIdx) => {
             const cLen = item.char_count || (item.text ? item.text.length : 0);
             const cValid = cLen >= 300 && cLen <= 350;
             const cCustom = item.customized === true;
-            const isTimeLocked = !!item.scheduled_at;
-
-            let secondaryLock = '';
-            if (isTimeLocked) {
-              const diffMs = new Date(item.scheduled_at) - new Date();
-              const diffH = Math.max(0, Math.floor(diffMs / 3600000));
-              const diffM = Math.max(0, Math.floor((diffMs % 3600000) / 60000));
-              secondaryLock = `<span class="time-lock-badge" style="font-size: 9px; padding: 1px 6px;">🔒 ${escapeHtml(item.scheduled_display || item.scheduled_label)} (${diffH}h ${diffM}m)</span>`;
-            }
 
             return `
               <div class="queue-item-card">
                 <div>
                   <div class="queue-item-top">
-                    <span class="queue-slot-badge">Slot #${actualIdx + 1} (${escapeHtml(item.scheduled_label || `+${actualIdx}h`)})</span>
+                    <span class="queue-slot-badge">Slot #${relIdx + 2} (${escapeHtml(item.scheduled_label || `+${relIdx + 1}h`)})</span>
                     <span class="char-badge ${cValid ? 'valid' : 'invalid'}" style="font-size: 10px; padding: 1px 6px;">
                       ${cLen} chars
                     </span>
                   </div>
-                  ${secondaryLock ? `<div style="margin-bottom: 8px;">${secondaryLock}</div>` : ''}
                   <div class="queue-item-body">${escapeHtml(item.text || '')}</div>
                 </div>
 
@@ -1627,10 +1791,10 @@
                     ${cCustom ? '👤 Custom' : '✨ AI Draft'}
                   </span>
                   <div style="display: flex; gap: 6px;">
-                    <button class="btn btn-secondary" onclick="window.replaceWithCurated(${actualIdx})" style="padding: 4px 8px; font-size: 11px;" title="Swap with curated">
+                    <button class="btn btn-secondary" onclick="window.replaceWithCurated(${originalIndex})" style="padding: 4px 8px; font-size: 11px;" title="Swap with curated">
                       🎲
                     </button>
-                    <button class="btn btn-secondary" onclick="window.openEditorFor(${actualIdx})" style="padding: 4px 10px; font-size: 11px;">
+                    <button class="btn btn-secondary" onclick="window.openEditorFor(${originalIndex})" style="padding: 4px 10px; font-size: 11px;">
                       ✏️ Edit
                     </button>
                   </div>
@@ -1639,6 +1803,9 @@
             `;
           }).join('');
         }
+
+        // Trigger immediate countdown update for all timers
+        updateAllTimers();
       }
 
       // Fetch and Parse posts_log.json
@@ -1734,12 +1901,13 @@
         }).join('');
       }
 
-      // Next Cron Run Countdown Timer (Top of every hour)
-      function updateCountdown() {
+      // Live 1-Second Master Ticker (Updates Top-of-Hour + Every Custom Scheduled Post Countdown)
+      function updateAllTimers() {
         const now = new Date();
+
+        // 1. Top of the hour cron timer
         const nextHour = new Date(now);
         nextHour.setHours(now.getHours() + 1, 0, 0, 0);
-
         const diffMs = nextHour - now;
         const minutes = Math.floor(diffMs / 60000);
         const seconds = Math.floor((diffMs % 60000) / 1000);
@@ -1752,10 +1920,36 @@
         if (spotBadge) {
           spotBadge.textContent = `${minutes}m ${seconds}s`;
         }
+
+        // 2. Custom Scheduled Post Ticking Timers
+        document.querySelectorAll('.ticking-timer').forEach(el => {
+          const targetIso = el.getAttribute('data-target');
+          if (!targetIso) return;
+          const targetDt = new Date(targetIso);
+          const remainMs = targetDt - now;
+
+          if (remainMs <= 0) {
+            el.textContent = "⚡ Due for Next Dispatch";
+            el.style.color = "#34D399";
+          } else {
+            const days = Math.floor(remainMs / 86400000);
+            const hours = Math.floor((remainMs % 86400000) / 3600000);
+            const mins = Math.floor((remainMs % 3600000) / 60000);
+            const secs = Math.floor((remainMs % 60000) / 1000);
+
+            const parts = [];
+            if (days > 0) parts.push(`${days}d`);
+            parts.push(`${hours}h`);
+            parts.push(`${String(mins).padStart(2, '0')}m`);
+            parts.push(`${String(secs).padStart(2, '0')}s`);
+
+            el.textContent = parts.join(' ');
+          }
+        });
       }
 
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
+      updateAllTimers();
+      setInterval(updateAllTimers, 1000);
 
       // Timing Radio Toggle
       timingModeAuto.addEventListener('change', () => {
@@ -1855,7 +2049,7 @@
         const item = queueData[index];
         if (!item) return;
 
-        editorModalTitle.textContent = `Customize Post for ${item.scheduled_label || `Slot #${index + 1}`}`;
+        editorModalTitle.textContent = item.scheduled_display ? `Edit Scheduled Post (${item.scheduled_display})` : `Customize Post for ${item.scheduled_label || `Slot #${index + 1}`}`;
         editorModalSub.textContent = "Edit post content and configure exact release timing.";
         editorTextarea.value = item.text || '';
         btnDeletePost.style.display = 'inline-flex';
@@ -1890,6 +2084,19 @@
         renderQueue(queueData);
         showToast("Swapped with verified Marc Lou post.");
         await saveQueueToRemote();
+      };
+
+      // Delete Queue Item (Direct Action)
+      window.deleteQueueItem = async function (index) {
+        if (queueData[index]) {
+          if (!confirm("Are you sure you want to cancel and remove this scheduled post?")) {
+            return;
+          }
+          queueData.splice(index, 1);
+          renderQueue(queueData);
+          showToast("Post removed from schedule.", "🗑️");
+          await saveQueueToRemote();
+        }
       };
 
       // Add Custom Post
@@ -1931,16 +2138,16 @@
       btnCloseEditor.addEventListener('click', closeEditor);
       btnCancelEditor.addEventListener('click', closeEditor);
 
-      // Delete Post from Queue
+      // Delete Post from Editor
       btnDeletePost.addEventListener('click', async () => {
         if (editingQueueIndex >= 0 && queueData[editingQueueIndex]) {
-          if (!confirm("Are you sure you want to remove this post from your upcoming schedule?")) {
+          if (!confirm("Are you sure you want to remove this post from your schedule?")) {
             return;
           }
           queueData.splice(editingQueueIndex, 1);
           renderQueue(queueData);
           closeEditor();
-          showToast("Post deleted from queue.", "🗑️");
+          showToast("Post deleted from schedule.", "🗑️");
           await saveQueueToRemote();
         }
       });
@@ -2003,16 +2210,6 @@
             created_at: new Date().toISOString()
           });
         }
-
-        // Re-sort queue so time-locked posts are ordered logically
-        queueData.sort((a, b) => {
-          if (a.scheduled_at && b.scheduled_at) {
-            return new Date(a.scheduled_at) - new Date(b.scheduled_at);
-          }
-          if (a.scheduled_at && !b.scheduled_at) return 1;
-          if (!a.scheduled_at && b.scheduled_at) return -1;
-          return 0;
-        });
 
         renderQueue(queueData);
         closeEditor();
