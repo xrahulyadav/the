@@ -48,6 +48,7 @@ except ImportError:
 # Paths
 BASE_DIR = Path(__file__).resolve().parent
 LOG_FILE = BASE_DIR / "posts_log.json"
+QUEUE_FILE = BASE_DIR / "upcoming_queue.json"
 
 # Credentials from Environment (injected by GitHub Repository Secrets or local .env)
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
@@ -316,6 +317,32 @@ def save_logs(posts: List[Dict[str, Any]]):
     print(f"[DATA PERSISTENCE] Successfully updated {LOG_FILE} ({len(posts)} total entries).")
 
 
+def load_queue() -> List[Dict[str, Any]]:
+    """Load upcoming scheduled posts queue."""
+    if not QUEUE_FILE.exists():
+        return []
+    try:
+        with open(QUEUE_FILE, "r", encoding="utf-8") as f:
+            content = json.load(f)
+            if isinstance(content, list):
+                return content
+            elif isinstance(content, dict):
+                return content.get("queue", [])
+            return []
+    except Exception as e:
+        print(f"[QUEUE LOAD WARN] Failed reading upcoming_queue.json ({e}).")
+        return []
+
+
+def save_queue(queue: List[Dict[str, Any]]):
+    """Write updated queue array to upcoming_queue.json atomically."""
+    temp_file = BASE_DIR / "upcoming_queue.tmp.json"
+    with open(temp_file, "w", encoding="utf-8") as f:
+        json.dump(queue, f, indent=2, ensure_ascii=False)
+    temp_file.replace(QUEUE_FILE)
+    print(f"[DATA PERSISTENCE] Successfully updated {QUEUE_FILE} ({len(queue)} upcoming items).")
+
+
 def main():
     print("=" * 65)
     utc_now = datetime.datetime.now(datetime.timezone.utc)
@@ -324,10 +351,33 @@ def main():
     print(f" Time: {utc_now.strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print("=" * 65)
 
-    # 1. Generate line-by-line micro-article in Marc Lou style
-    post_text = generate_wellness_insight()
+    # 1. Check Upcoming Scheduled Queue
+    queue = load_queue()
+    was_customized = False
+    queue_id = None
+
+    if queue:
+        # Pop the first scheduled post from queue
+        scheduled_item = queue.pop(0)
+        post_text = scheduled_item.get("text", "").strip()
+        was_customized = scheduled_item.get("customized", False)
+        queue_id = scheduled_item.get("id", "queue_item")
+        print(f"[QUEUE ENGINE] Dispatched item from queue: {queue_id} (customized={was_customized})")
+
+        # Validate content exists
+        if not post_text:
+            print("[QUEUE ENGINE WARN] Empty text in queue item, generating fresh post.")
+            post_text = generate_wellness_insight()
+            was_customized = False
+        elif not (300 <= len(post_text) <= 350) and not was_customized:
+            # If not customized by user and slightly outside bounds, format it
+            post_text = enforce_exact_char_range(post_text)
+    else:
+        print("[QUEUE ENGINE] Queue empty. Generating fresh AI insight.")
+        post_text = generate_wellness_insight()
+
     char_len = len(post_text)
-    print(f"[AI GENERATOR] Generated post ({char_len} chars):")
+    print(f"[DISPATCH CONTENT] Target post ({char_len} chars):")
     print("-" * 55)
     print(post_text)
     print("-" * 55)
@@ -346,7 +396,8 @@ def main():
         "status": status,
         "timestamp": utc_now.strftime("%Y-%m-%d %H:%M:%S UTC"),
         "threads_url": threads_url or "https://www.threads.net",
-        "error": error_msg
+        "error": error_msg,
+        "customized": was_customized
     }
 
     # 4. Save to posts_log.json
@@ -354,8 +405,37 @@ def main():
     logs.insert(0, entry)
     save_logs(logs)
 
+    # 5. Top up upcoming_queue.json so at least 3 upcoming posts are ready
+    while len(queue) < 3:
+        fresh_draft = generate_wellness_insight()
+        new_slot_idx = len(queue) + 1
+        queue.append({
+            "id": f"queue_{int(utc_now.timestamp())}_{new_slot_idx}",
+            "text": fresh_draft,
+            "char_count": len(fresh_draft),
+            "customized": False,
+            "slot": f"SLOT_{new_slot_idx}",
+            "scheduled_label": "Next Run (Upcoming Top of the Hour)" if new_slot_idx == 1 else f"Run +{new_slot_idx - 1} Hour{'s' if new_slot_idx > 2 else ''}",
+            "created_at": utc_now.strftime("%Y-%m-%d %H:%M:%S UTC")
+        })
+
+    # Standardize slot labels for dashboard display
+    slot_labels = [
+        "Next Run (Upcoming Top of the Hour)",
+        "Run +1 Hour",
+        "Run +2 Hours",
+        "Run +3 Hours",
+        "Run +4 Hours"
+    ]
+    for idx, item in enumerate(queue):
+        item["slot"] = f"SLOT_{idx + 1}"
+        item["scheduled_label"] = slot_labels[idx] if idx < len(slot_labels) else f"Run +{idx} Hours"
+        item["char_count"] = len(item.get("text", ""))
+
+    save_queue(queue)
+
     print("=" * 65)
-    print(f" [COMPLETED] Status: {status} | Post ID: {entry['id']}")
+    print(f" [COMPLETED] Status: {status} | Post ID: {entry['id']} | Queue Maintained ({len(queue)} items ready)")
     print("=" * 65)
 
 

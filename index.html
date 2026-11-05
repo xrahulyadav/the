@@ -30,6 +30,7 @@
       --accent-emerald-glow: rgba(16, 185, 129, 0.25);
       --accent-blue: #3B82F6;
       --accent-blue-glow: rgba(59, 130, 246, 0.3);
+      --accent-purple: #8B5CF6;
       --accent-amber: #F59E0B;
       --accent-red: #EF4444;
 
@@ -157,7 +158,7 @@
     }
 
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       text-align: left;
     }
 
@@ -167,7 +168,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--text-subtle);
+      color: var(--text-muted);
       margin-bottom: 6px;
     }
 
@@ -177,9 +178,9 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       padding: 12px 14px;
-      font-family: var(--font-system);
-      font-size: 14px;
       color: var(--text-primary);
+      font-size: 14px;
+      font-family: inherit;
       outline: none;
       transition: all 0.2s var(--ease-apple);
     }
@@ -187,7 +188,7 @@
     .input-field:focus {
       background: rgba(255, 255, 255, 0.07);
       border-color: rgba(255, 255, 255, 0.3);
-      box-shadow: 0 0 16px rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
     }
 
     .btn-submit {
@@ -196,16 +197,13 @@
       color: #000000;
       border: none;
       border-radius: 12px;
-      padding: 13px;
-      font-size: 13px;
+      padding: 12px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.25s var(--ease-apple);
-      margin-top: 6px;
+      margin-top: 10px;
+      transition: all 0.2s var(--ease-apple);
+      box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
     }
 
     .btn-submit:hover {
@@ -214,31 +212,29 @@
     }
 
     .stealth-footer {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      color: var(--text-subtle);
       margin-top: 24px;
-      letter-spacing: 0.05em;
+      font-size: 11px;
+      color: var(--text-subtle);
+      font-family: var(--font-mono);
     }
 
     /* ==========================================================================
-       MAIN DASHBOARD LAYOUT
+       DASHBOARD LAYOUT
        ========================================================================== */
     .container {
       max-width: 1160px;
       margin: 0 auto;
-      padding: 40px 24px 88px;
+      padding: 40px 24px 80px;
       position: relative;
       z-index: 1;
     }
 
+    /* Header */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 36px;
-      padding-bottom: 24px;
-      border-bottom: var(--card-border);
       flex-wrap: wrap;
       gap: 20px;
     }
@@ -250,19 +246,19 @@
     }
 
     .threads-badge {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       background: rgba(255, 255, 255, 0.04);
       border: var(--card-border);
-      border-radius: 14px;
+      border-radius: 12px;
       display: grid;
       place-items: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .threads-icon {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       fill: var(--text-primary);
     }
 
@@ -270,7 +266,6 @@
       font-size: 20px;
       font-weight: 700;
       letter-spacing: -0.02em;
-      color: var(--text-primary);
       display: flex;
       align-items: center;
       gap: 10px;
@@ -280,13 +275,14 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 11px;
+      padding: 3px 8px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 999px;
+      font-size: 10px;
       font-weight: 600;
       color: var(--accent-emerald);
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.25);
-      padding: 3px 9px;
-      border-radius: 999px;
+      letter-spacing: 0.04em;
     }
 
     .pulse-dot {
@@ -295,7 +291,7 @@
       background-color: var(--accent-emerald);
       border-radius: 50%;
       box-shadow: 0 0 8px var(--accent-emerald);
-      animation: pulse-glow 2s infinite ease-in-out;
+      animation: pulse-glow 2s infinite;
     }
 
     @keyframes pulse-glow {
@@ -330,6 +326,7 @@
       border: 1px solid transparent;
       text-decoration: none;
       white-space: nowrap;
+      font-family: inherit;
     }
 
     .btn-secondary {
@@ -355,6 +352,18 @@
       background: #E4E4E7;
       transform: translateY(-1px);
       box-shadow: 0 6px 24px rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-emerald {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34D399;
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .btn-emerald:hover {
+      background: rgba(16, 185, 129, 0.25);
+      border-color: rgba(16, 185, 129, 0.6);
+      transform: translateY(-1px);
     }
 
     /* ==========================================================================
@@ -453,15 +462,17 @@
     }
 
     /* ==========================================================================
-       LOGS SECTION & FEED
+       UPCOMING QUEUE SECTION (NEXT POST & SCHEDULED CARDS)
        ========================================================================== */
-    .logs-section {
+    .queue-section {
       background: var(--card-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: var(--card-border);
       border-radius: var(--card-radius);
       padding: 32px;
+      margin-bottom: 32px;
+      position: relative;
     }
 
     .section-header {
@@ -491,6 +502,153 @@
       color: var(--text-muted);
       padding: 2px 8px;
       border-radius: 999px;
+    }
+
+    /* Next Post Featured Spotlight */
+    .spotlight-card {
+      background: linear-gradient(145deg, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.05) 50%, rgba(255, 255, 255, 0.02) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .spotlight-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .spotlight-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: #60A5FA;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      padding: 4px 10px;
+      border-radius: 8px;
+      letter-spacing: 0.03em;
+    }
+
+    .spotlight-countdown {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: #34D399;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 4px 10px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .spotlight-body {
+      font-size: 15px;
+      line-height: 1.65;
+      color: #F4F4F5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      font-family: var(--font-system);
+    }
+
+    .spotlight-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .spotlight-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Secondary Queue Grid */
+    .queue-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    .queue-item-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 18px;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .queue-item-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .queue-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+
+    .queue-slot-badge {
+      color: #A1A1AA;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .queue-item-body {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text-muted);
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: 14px;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+
+    .queue-item-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    /* ==========================================================================
+       LOGS SECTION & FEED
+       ========================================================================== */
+    .logs-section {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      padding: 32px;
     }
 
     .logs-feed {
@@ -627,6 +785,178 @@
       color: #FFFFFF;
     }
 
+    /* ==========================================================================
+       MODALS (EDITOR & SETTINGS)
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s var(--ease-apple);
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      width: 100%;
+      max-width: 680px;
+      background: #0B0B0F;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85);
+      transform: scale(0.96) translateY(10px);
+      transition: all 0.3s var(--ease-apple);
+    }
+
+    .modal-overlay.open .modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .modal-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .btn-close {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFFFFF;
+    }
+
+    .editor-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .char-meter {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .meter-status {
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    .meter-status.valid {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34D399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .meter-status.warn {
+      background: rgba(245, 158, 11, 0.15);
+      color: #FBBF24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .meter-status.invalid {
+      background: rgba(239, 68, 68, 0.15);
+      color: #F87171;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    .template-tools {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tool-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .tool-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #FFFFFF;
+    }
+
+    .editor-textarea {
+      width: 100%;
+      height: 220px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 16px;
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    .editor-textarea:focus {
+      border-color: rgba(59, 130, 246, 0.5);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
     /* Apple-Style Toast */
     .apple-toast {
       position: fixed;
@@ -642,7 +972,7 @@
       transform: translateY(80px);
       opacity: 0;
       transition: all 0.3s var(--ease-apple);
-      z-index: 10000;
+      z-index: 10001;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -739,8 +1069,12 @@
       </div>
 
       <div class="header-actions">
-        <button class="btn btn-secondary" id="btn-refresh" title="Reload posts_log.json">
-          ↻ Fetch Latest Logs
+        <button class="btn btn-secondary" id="btn-github-settings" title="Configure 1-Click GitHub Sync Token">
+          <span>⚙️ GitHub Sync</span>
+          <span id="sync-status-dot" style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #71717A; margin-left: 2px;"></span>
+        </button>
+        <button class="btn btn-secondary" id="btn-refresh" title="Reload queue & logs">
+          ↻ Fetch Latest
         </button>
         <button class="btn btn-secondary" id="btn-lock" title="Lock Portal">
           <span>Lock Session</span>
@@ -787,13 +1121,43 @@
           <span>⚡</span>
           <span>Zero-Cost Serverless GitHub Architecture</span>
         </h3>
-        <p>Backend runs via <strong>GitHub Actions</strong> every 1 hour, auto-committing dispatch results to <code>posts_log.json</code>. Frontend hosted 100% statically on <strong>GitHub Pages</strong>.</p>
+        <p>Backend runs via <strong>GitHub Actions</strong> every 1 hour, auto-committing dispatch results to <code>posts_log.json</code> and maintaining <code>upcoming_queue.json</code>. Frontend hosted 100% statically on <strong>GitHub Pages</strong>.</p>
       </div>
       <div>
         <span class="infra-tag">Cron: 0 * * * *</span>
         <span class="infra-tag" style="margin-left: 6px;">gemini-2.5-flash</span>
       </div>
     </div>
+
+    <!-- UPCOMING SCHEDULED POSTS & LIVE CUSTOMIZER -->
+    <section class="queue-section">
+      <div class="section-header">
+        <div class="section-title">
+          <span>🎯</span>
+          <span>Upcoming Scheduled Posts (अगली पोस्ट व कतार)</span>
+          <span class="badge-count" id="queue-count-badge">0</span>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-secondary" id="btn-add-queue-item" style="padding: 6px 14px; font-size: 12px;">
+            ➕ Add Custom Post
+          </button>
+        </div>
+      </div>
+
+      <!-- Spotlight: The Very Next Post -->
+      <div id="spotlight-container">
+        <div class="empty-state">Loading upcoming queue from upcoming_queue.json...</div>
+      </div>
+
+      <!-- Secondary Queue Items -->
+      <div style="margin: 28px 0 14px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-subtle); display: flex; align-items: center; gap: 8px;">
+        <span>FOLLOWING IN LINE (आगे के शेड्यूल)</span>
+        <span style="height: 1px; flex: 1; background: rgba(255, 255, 255, 0.06);"></span>
+      </div>
+      <div class="queue-grid" id="secondary-queue-list">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
 
     <!-- Live Execution Logs -->
     <section class="logs-section">
@@ -814,6 +1178,89 @@
     </section>
   </div>
 
+  <!-- POST EDITOR MODAL -->
+  <div class="modal-overlay" id="editor-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="editor-modal-title">Customize Scheduled Post</h3>
+          <p class="modal-sub" id="editor-modal-sub">Edit post text or insert Marc Lou line-by-line format</p>
+        </div>
+        <button class="btn-close" id="btn-close-editor">✕</button>
+      </div>
+
+      <!-- Length & Verification Bar -->
+      <div class="editor-bar">
+        <div class="char-meter">
+          <span id="editor-char-count" style="font-weight: 700;">0</span> / 350 chars
+          <span id="editor-char-status" class="meter-status valid">✓ Valid (300-350)</span>
+        </div>
+        <div class="template-tools">
+          <button type="button" class="tool-btn" id="tool-header">✨ Header</button>
+          <button type="button" class="tool-btn" id="tool-sleep">🩺 Sleep</button>
+          <button type="button" class="tool-btn" id="tool-focus">🧠 Focus</button>
+          <button type="button" class="tool-btn" id="tool-workout">🏃 Cardio</button>
+          <button type="button" class="tool-btn" id="tool-diet">🥑 Diet</button>
+          <button type="button" class="tool-btn" id="tool-water">💧 Water</button>
+        </div>
+      </div>
+
+      <textarea id="editor-textarea" class="editor-textarea" placeholder="✨ Type your post here..."></textarea>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <div style="font-size: 11px; color: var(--text-subtle); font-family: var(--font-mono);" id="editor-mode-desc">
+          Mode: Standard Update
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-editor">Cancel</button>
+          <button type="button" class="btn btn-secondary" id="btn-open-github-web" title="Open and edit file directly on GitHub.com">
+            Edit on GitHub ↗
+          </button>
+          <button type="button" class="btn btn-primary" id="btn-save-post">
+            💾 Save to Queue
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GITHUB SYNC SETTINGS MODAL -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">⚙️ GitHub 1-Click Sync</h3>
+          <p class="modal-sub">Directly commit changes to repository from this dashboard</p>
+        </div>
+        <button class="btn-close" id="btn-close-settings">✕</button>
+      </div>
+
+      <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;">
+        To save edited posts directly from this browser to GitHub without leaving the page, enter your <strong>GitHub Personal Access Token (PAT)</strong>. It is stored securely only in your browser's local memory.
+      </div>
+
+      <div class="form-group">
+        <label class="input-label" for="input-github-token">Personal Access Token (PAT)</label>
+        <input type="password" id="input-github-token" class="input-field" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx or github_pat_xxxx" autocomplete="off">
+        <div style="font-size: 11px; color: var(--text-subtle); margin-top: 6px;">
+          Requires <code>repo</code> scope (or Fine-grained: <code>Contents: Read and write</code>).
+          <a href="https://github.com/settings/tokens/new?scopes=repo&description=Threads+Dashboard+Sync" target="_blank" rel="noopener" style="color: #93C5FD; text-decoration: underline;">Generate Token on GitHub ↗</a>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-clear-token" style="color: #F87171;">
+          Clear Token
+        </button>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-settings">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btn-save-token">Save Token</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Element -->
   <div class="apple-toast" id="apple-toast">
     <span id="toast-icon">✓</span>
@@ -824,10 +1271,30 @@
     (function () {
       "use strict";
 
+      // Repository Constants
+      const GITHUB_REPO_OWNER = "xrahulyadav";
+      const GITHUB_REPO_NAME = "the";
+      const QUEUE_FILE_PATH = "upcoming_queue.json";
+
       // Stealth Security Configuration (Client-Side Hidden 3-Try Mechanism)
       const SECRET_EMAIL = "1";
       const SECRET_PASSWORD = " "; // Single space character
       let secretAttempts = 0;
+
+      // In-memory state
+      let queueData = [];
+      let postsLogData = [];
+      let editingQueueIndex = -1; // -1 for new post, >=0 for existing
+      let currentFileSha = null;
+
+      // Curated Fallback Posts for 1-Click Replace
+      const CURATED_REPLACEMENTS = [
+        "✨ I rebuilt my personal health dashboard ✨\nIt now tracks:\n🩺 My sleep: 8h restorative slow-wave cycles\n🧠 Brain focus: zero afternoon crash periods\n🏃 Zone 2: 150m conversational cardio weekly\n🥑 Nutrition: 30+ gut microbiome plants\n💧 Hydration: cellular electrolyte balance\n\nIf you don't take care of your body, where will you live?",
+        "✨ I automated my entire health system ✨\nIt now monitors:\n🩺 Biomarkers: HRV, VO2 Max, & cellular recovery\n☀️ Sunlight: 15m morning retinal photons\n⚡ Energy: 5g creatine monohydrate daily\n🏃 Training: heavy compound lifts + Zone 2\n💤 Sleep: zero blue photons before bed\n\nTreat your biology like production code: optimize daily inputs 🧬.",
+        "✨ I turned my daily health into an operating system ✨\nIt now tracks:\n🩺 Recovery: 8.4h deep slow-wave sleep\n🧠 Focus: zero afternoon energy crashes\n🏃 Movement: 150m weekly Zone 2 cardio\n🥑 Fuel: 40g protein pulses & polyphenols\n💧 Hydration: cellular electrolyte balance\n\nSmall daily commits compound into superhuman vitality ⚡.",
+        "✨ I rebuilt my morning routine from scratch ✨\nHere is what changed:\n☀️ 07:00 AM: 15m direct sunlight for cortisol rhythm\n💧 07:15 AM: 500ml water + Celtic sea salt\n🏃 12:00 PM: 30m Zone 2 cardio & GLUT4\n🧠 03:00 PM: cold shower dopamine reset\n💤 10:30 PM: 65°F cool room for REM sleep\n\nYour daily habits build your future biology 🧬.",
+        "✨ Why I track my health biomarkers daily ✨\nMy baseline metrics dashboard:\n🩺 Sleep score: 88+ via slow-wave glymphatic cycles\n🏃 VO2 Max: top 5% functional longevity marker\n🧠 Deep work: 4h uninterrupted morning flow\n🥑 Nutrition: 30+ diverse plant fibers weekly\n\nWhat gets measured gets optimized. Take care of your body ⚡."
+      ];
 
       // DOM Elements
       const shield = document.getElementById('stealth-shield');
@@ -835,7 +1302,6 @@
       const emailInput = document.getElementById('login-email');
       const passInput = document.getElementById('login-password');
       const errorBanner = document.getElementById('error-banner');
-      const errorText = document.getElementById('error-text');
 
       const statTotalPosts = document.getElementById('stat-total-posts');
       const statSuccessRate = document.getElementById('stat-success-rate');
@@ -844,11 +1310,38 @@
       const statCountdownSub = document.getElementById('stat-countdown-sub');
       const statLengthCompliance = document.getElementById('stat-length-compliance');
 
+      const queueCountBadge = document.getElementById('queue-count-badge');
+      const spotlightContainer = document.getElementById('spotlight-container');
+      const secondaryQueueList = document.getElementById('secondary-queue-list');
       const logsFeed = document.getElementById('logs-feed');
       const logsCountBadge = document.getElementById('logs-count-badge');
+
       const btnRefresh = document.getElementById('btn-refresh');
       const btnLock = document.getElementById('btn-lock');
+      const btnAddQueueItem = document.getElementById('btn-add-queue-item');
+      const btnGithubSettings = document.getElementById('btn-github-settings');
+      const syncStatusDot = document.getElementById('sync-status-dot');
 
+      // Modals
+      const editorModal = document.getElementById('editor-modal');
+      const btnCloseEditor = document.getElementById('btn-close-editor');
+      const btnCancelEditor = document.getElementById('btn-cancel-editor');
+      const btnSavePost = document.getElementById('btn-save-post');
+      const btnOpenGithubWeb = document.getElementById('btn-open-github-web');
+      const editorTextarea = document.getElementById('editor-textarea');
+      const editorCharCount = document.getElementById('editor-char-count');
+      const editorCharStatus = document.getElementById('editor-char-status');
+      const editorModalTitle = document.getElementById('editor-modal-title');
+      const editorModalSub = document.getElementById('editor-modal-sub');
+
+      const settingsModal = document.getElementById('settings-modal');
+      const btnCloseSettings = document.getElementById('btn-close-settings');
+      const btnCancelSettings = document.getElementById('btn-cancel-settings');
+      const btnSaveToken = document.getElementById('btn-save-token');
+      const btnClearToken = document.getElementById('btn-clear-token');
+      const inputGithubToken = document.getElementById('input-github-token');
+
+      // Toasts
       const appleToast = document.getElementById('apple-toast');
       const toastMessage = document.getElementById('toast-message');
       const toastIcon = document.getElementById('toast-icon');
@@ -859,14 +1352,29 @@
         appleToast.classList.add('show');
         setTimeout(() => {
           appleToast.classList.remove('show');
-        }, 3000);
+        }, 3200);
+      }
+
+      function updateTokenStatusDot() {
+        const token = localStorage.getItem('gh_pat_token');
+        if (token && token.trim()) {
+          syncStatusDot.style.background = '#10B981';
+          syncStatusDot.style.boxShadow = '0 0 6px #10B981';
+          btnGithubSettings.title = 'GitHub 1-Click Sync Active';
+        } else {
+          syncStatusDot.style.background = '#71717A';
+          syncStatusDot.style.boxShadow = 'none';
+          btnGithubSettings.title = 'Configure 1-Click GitHub Sync Token';
+        }
       }
 
       // Check existing session auth state
       if (sessionStorage.getItem('stealth_gateway_auth') === 'verified') {
         shield.classList.add('unlocked');
-        loadLogs();
+        loadAllData();
       }
+
+      updateTokenStatusDot();
 
       // Stealth Login Form Handler
       loginForm.addEventListener('submit', (e) => {
@@ -885,15 +1393,13 @@
             sessionStorage.setItem('stealth_gateway_auth', 'verified');
             shield.classList.add('unlocked');
             showToast("Access granted. Session unlocked.");
-            loadLogs();
+            loadAllData();
             return;
           }
         } else {
-          // Any incorrect credential immediately resets secret counter
           secretAttempts = 0;
         }
 
-        // Show generic error without revealing count or hints
         errorBanner.classList.add('show');
         passInput.value = '';
       });
@@ -906,38 +1412,158 @@
         showToast("Session locked.", "🔒");
       });
 
+      // Load All Data (Queue + Logs)
+      async function loadAllData() {
+        await Promise.all([loadQueue(), loadLogs()]);
+      }
+
+      // Fetch and Parse upcoming_queue.json
+      async function loadQueue() {
+        try {
+          const res = await fetch(`upcoming_queue.json?t=${Date.now()}`);
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+          }
+          const data = await res.json();
+          queueData = Array.isArray(data) ? data : (data.queue || []);
+          renderQueue(queueData);
+        } catch (err) {
+          console.warn("[QUEUE LOAD WARN]", err);
+          spotlightContainer.innerHTML = `
+            <div class="empty-state">
+              No upcoming queue found yet.<br>
+              Click <strong>"➕ Add Custom Post"</strong> or run GitHub Actions to initialize.
+            </div>
+          `;
+          secondaryQueueList.innerHTML = '';
+          queueCountBadge.textContent = '0';
+        }
+      }
+
+      // Render Queue Section
+      function renderQueue(queue) {
+        queueCountBadge.textContent = queue.length;
+
+        if (!queue || queue.length === 0) {
+          spotlightContainer.innerHTML = `
+            <div class="empty-state">
+              Upcoming queue is empty. Click <strong>"➕ Add Custom Post"</strong> to schedule one!
+            </div>
+          `;
+          secondaryQueueList.innerHTML = '';
+          return;
+        }
+
+        // 1. Featured Spotlight: First Item (Next Scheduled Post)
+        const nextPost = queue[0];
+        const nextCharLen = nextPost.char_count || (nextPost.text ? nextPost.text.length : 0);
+        const nextIsValid = nextCharLen >= 300 && nextCharLen <= 350;
+        const isCustom = nextPost.customized === true;
+
+        spotlightContainer.innerHTML = `
+          <div class="spotlight-card">
+            <div class="spotlight-top">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span class="spotlight-tag">⚡ NEXT DISPATCH (${escapeHtml(nextPost.scheduled_label || 'Top of the Hour')})</span>
+                <span class="status-pill ${isCustom ? 'status-success' : 'status-failed'}" style="background: ${isCustom ? 'rgba(139, 92, 246, 0.15)' : 'rgba(59, 130, 246, 0.15)'}; color: ${isCustom ? '#C084FC' : '#93C5FD'}; border-color: ${isCustom ? 'rgba(139, 92, 246, 0.4)' : 'rgba(59, 130, 246, 0.4)'};">
+                  ${isCustom ? '👤 User Customized' : '✨ AI Auto-Draft'}
+                </span>
+                <span class="char-badge ${nextIsValid ? 'valid' : 'invalid'}">
+                  ${nextIsValid ? '✓' : '⚠'} ${nextCharLen} chars (Goal: 300-350)
+                </span>
+              </div>
+              <div class="spotlight-countdown" id="spotlight-countdown-badge">
+                <span>⏳ Auto-posts in</span>
+                <span id="spotlight-time-left" style="font-weight: 700;">--:--</span>
+              </div>
+            </div>
+
+            <div class="spotlight-body">${escapeHtml(nextPost.text || '')}</div>
+
+            <div class="spotlight-bottom">
+              <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-subtle);">
+                ID: ${escapeHtml(nextPost.id || 'queue_1')} • Slot: NEXT_RUN
+              </span>
+              <div class="spotlight-actions">
+                <button class="btn btn-secondary" onclick="window.replaceWithCurated(0)" style="padding: 7px 12px; font-size: 12px;" title="Replace with another Marc Lou verified masterpiece">
+                  🎲 Swap AI Draft
+                </button>
+                <button class="btn btn-primary" onclick="window.openEditorFor(0)" style="padding: 7px 16px; font-size: 12px;">
+                  ✏️ Customize / Edit Post
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // 2. Secondary Queue Items (Run +1, Run +2, etc.)
+        const secondary = queue.slice(1);
+        if (secondary.length === 0) {
+          secondaryQueueList.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--text-subtle); font-size: 12px; font-family: var(--font-mono);">
+              No additional queued posts. (The system auto-refills up to 3 slots on next run).
+            </div>
+          `;
+        } else {
+          secondaryQueueList.innerHTML = secondary.map((item, relIdx) => {
+            const actualIdx = relIdx + 1;
+            const cLen = item.char_count || (item.text ? item.text.length : 0);
+            const cValid = cLen >= 300 && cLen <= 350;
+            const cCustom = item.customized === true;
+
+            return `
+              <div class="queue-item-card">
+                <div>
+                  <div class="queue-item-top">
+                    <span class="queue-slot-badge">Slot #${actualIdx + 1} (${escapeHtml(item.scheduled_label || `+${actualIdx}h`)})</span>
+                    <span class="char-badge ${cValid ? 'valid' : 'invalid'}" style="font-size: 10px; padding: 1px 6px;">
+                      ${cLen} chars
+                    </span>
+                  </div>
+                  <div class="queue-item-body">${escapeHtml(item.text || '')}</div>
+                </div>
+
+                <div class="queue-item-bottom">
+                  <span style="font-size: 10px; font-family: var(--font-mono); color: ${cCustom ? '#C084FC' : 'var(--text-subtle)'};">
+                    ${cCustom ? '👤 Custom' : '✨ AI Draft'}
+                  </span>
+                  <div style="display: flex; gap: 6px;">
+                    <button class="btn btn-secondary" onclick="window.replaceWithCurated(${actualIdx})" style="padding: 4px 8px; font-size: 11px;" title="Swap with curated">
+                      🎲
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.openEditorFor(${actualIdx})" style="padding: 4px 10px; font-size: 11px;">
+                      ✏️ Edit
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
       // Fetch and Parse posts_log.json
       async function loadLogs() {
         try {
-          // Cache busting query param ensures fresh data on GitHub Pages
           const res = await fetch(`posts_log.json?t=${Date.now()}`);
           if (!res.ok) {
             throw new Error(`HTTP ${res.status}`);
           }
           let data = await res.json();
-          let posts = [];
-
-          if (Array.isArray(data)) {
-            posts = data;
-          } else if (data && Array.isArray(data.posts)) {
-            posts = data.posts;
-          }
-
-          renderDashboard(posts);
-          showToast(`Synchronized ${posts.length} records.`);
+          postsLogData = Array.isArray(data) ? data : (data.posts || []);
+          renderLogs(postsLogData);
         } catch (err) {
           console.warn("[LOG LOAD ERROR]", err);
           logsFeed.innerHTML = `
             <div class="empty-state">
-              Unable to load posts_log.json (${escapeHtml(err.message)}).<br>
-              Ensure the GitHub Actions workflow has run and committed posts_log.json.
+              Unable to load posts_log.json (${escapeHtml(err.message)}).
             </div>
           `;
         }
       }
 
       // Render Metrics and Feed
-      function renderDashboard(posts) {
+      function renderLogs(posts) {
         logsCountBadge.textContent = posts.length;
         statTotalPosts.textContent = posts.length;
 
@@ -965,7 +1591,6 @@
         statFailureCount.textContent = `${posts.length - successCount} Failed Dispatches`;
         statLengthCompliance.textContent = `${compRate}%`;
 
-        // Render Feed
         logsFeed.innerHTML = posts.map(p => {
           const isSuccess = p.status === 'SUCCESS';
           const charLen = p.char_count || (p.text ? p.text.length : 0);
@@ -982,9 +1607,14 @@
                   <span class="char-badge ${isValidRange ? 'valid' : 'invalid'}">
                     ${isValidRange ? '✓' : '⚠'} ${charLen} chars
                   </span>
+                  ${p.customized ? `
+                    <span class="status-pill" style="background: rgba(139, 92, 246, 0.12); color: #C084FC; border: 1px solid rgba(139, 92, 246, 0.3);">
+                      👤 Custom Post
+                    </span>
+                  ` : ''}
                 </div>
                 <div>
-                  ${p.threads_url && !String(p.id).startsWith('mock_') ? `
+                  ${p.threads_url && !String(p.id).startsWith('err_') ? `
                     <a href="${escapeHtml(p.threads_url)}" target="_blank" rel="noopener" class="btn-link">
                       View on Threads ↗
                     </a>
@@ -992,9 +1622,7 @@
                 </div>
               </div>
 
-              <div class="post-body">
-                ${escapeHtml(p.text || 'No post content recorded')}
-              </div>
+              <div class="post-body">${escapeHtml(p.text || 'No post content recorded')}</div>
 
               <div class="post-bottom">
                 <span class="post-id-tag">ID: ${escapeHtml(String(p.id))}</span>
@@ -1007,7 +1635,7 @@
         }).join('');
       }
 
-      // Next Cron Run Countdown Timer (Every top of the hour: :00)
+      // Next Cron Run Countdown Timer (Top of every hour)
       function updateCountdown() {
         const now = new Date();
         const nextHour = new Date(now);
@@ -1020,14 +1648,262 @@
         const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         statCountdown.textContent = formatted;
         statCountdownSub.textContent = `Auto-dispatch in ~${minutes}m ${seconds}s`;
+
+        const spotBadge = document.getElementById('spotlight-time-left');
+        if (spotBadge) {
+          spotBadge.textContent = `${minutes}m ${seconds}s`;
+        }
       }
 
       updateCountdown();
       setInterval(updateCountdown, 1000);
 
+      // Editor Character Counter Validation
+      function updateEditorMeter() {
+        const text = editorTextarea.value;
+        const len = text.length;
+        editorCharCount.textContent = len;
+
+        if (len >= 300 && len <= 350) {
+          editorCharStatus.className = 'meter-status valid';
+          editorCharStatus.textContent = '✓ Perfect Marc Lou Range (300-350)';
+        } else if (len >= 280 && len <= 380) {
+          editorCharStatus.className = 'meter-status warn';
+          editorCharStatus.textContent = len < 300 ? `⚠ Add ${300 - len} more chars` : `⚠ Trim ${len - 350} chars`;
+        } else {
+          editorCharStatus.className = 'meter-status invalid';
+          editorCharStatus.textContent = len < 300 ? `✕ Too short (${len}/300)` : `✕ Too long (${len}/350)`;
+        }
+      }
+
+      editorTextarea.addEventListener('input', updateEditorMeter);
+
+      // Snippet Tools
+      document.getElementById('tool-header').addEventListener('click', () => {
+        insertAtCursor(editorTextarea, "✨ I rebuilt my personal health system ✨\nIt now tracks:\n");
+        updateEditorMeter();
+      });
+      document.getElementById('tool-sleep').addEventListener('click', () => {
+        insertAtCursor(editorTextarea, "🩺 Sleep: 8h restorative slow-wave cycles\n");
+        updateEditorMeter();
+      });
+      document.getElementById('tool-focus').addEventListener('click', () => {
+        insertAtCursor(editorTextarea, "🧠 Brain focus: zero afternoon crash periods\n");
+        updateEditorMeter();
+      });
+      document.getElementById('tool-workout').addEventListener('click', () => {
+        insertAtCursor(editorTextarea, "🏃 Zone 2: 150m conversational cardio weekly\n");
+        updateEditorMeter();
+      });
+      document.getElementById('tool-diet').addEventListener('click', () => {
+        insertAtCursor(editorTextarea, "🥑 Nutrition: 30+ gut microbiome plants\n");
+        updateEditorMeter();
+      });
+      document.getElementById('tool-water').addEventListener('click', () => {
+        insertAtCursor(editorTextarea, "💧 Hydration: cellular electrolyte balance\n");
+        updateEditorMeter();
+      });
+
+      function insertAtCursor(textarea, textToInsert) {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const val = textarea.value;
+        textarea.value = val.substring(0, start) + textToInsert + val.substring(end);
+        textarea.selectionStart = textarea.selectionEnd = start + textToInsert.length;
+        textarea.focus();
+      }
+
+      // Open Editor for Queue Item
+      window.openEditorFor = function (index) {
+        editingQueueIndex = index;
+        const item = queueData[index];
+        if (!item) return;
+
+        editorModalTitle.textContent = `Customize Post for ${item.scheduled_label || `Slot #${index + 1}`}`;
+        editorModalSub.textContent = index === 0 ? "This post will be published automatically on the next hourly run." : "This post is lined up in your upcoming schedule.";
+        editorTextarea.value = item.text || '';
+        updateEditorMeter();
+        editorModal.classList.add('open');
+      };
+
+      // Swap with Curated Masterpiece
+      window.replaceWithCurated = async function (index) {
+        if (!queueData[index]) return;
+        const currentText = queueData[index].text;
+        const alternatives = CURATED_REPLACEMENTS.filter(p => p !== currentText);
+        const pick = alternatives[Math.floor(Math.random() * alternatives.length)];
+
+        queueData[index].text = pick;
+        queueData[index].char_count = pick.length;
+        queueData[index].customized = false;
+
+        renderQueue(queueData);
+        showToast("Swapped with verified Marc Lou post.");
+        await saveQueueToRemote();
+      };
+
+      // Add Custom Post
+      btnAddQueueItem.addEventListener('click', () => {
+        editingQueueIndex = -1; // New post
+        editorModalTitle.textContent = "Add Custom Post to Queue";
+        editorModalSub.textContent = "This post will be added to your scheduled lineup.";
+        editorTextarea.value = (
+          "✨ I rebuilt my personal health system ✨\n" +
+          "It now tracks:\n" +
+          "🩺 Sleep: 8h slow-wave recovery\n" +
+          "🧠 Focus: 4h deep work block\n" +
+          "🏃 Zone 2: 45m metabolic cardio\n" +
+          "🥑 Fuel: 40g whole food protein\n" +
+          "💧 Water: 3L electrolytes\n\n" +
+          "What gets measured gets optimized. Guard your body 🧬."
+        );
+        updateEditorMeter();
+        editorModal.classList.add('open');
+      });
+
+      // Close Editor
+      function closeEditor() {
+        editorModal.classList.remove('open');
+        editingQueueIndex = -1;
+      }
+      btnCloseEditor.addEventListener('click', closeEditor);
+      btnCancelEditor.addEventListener('click', closeEditor);
+
+      // Save Post from Editor
+      btnSavePost.addEventListener('click', async () => {
+        const text = editorTextarea.value.trim();
+        if (!text) {
+          alert("Post content cannot be empty.");
+          return;
+        }
+
+        const len = text.length;
+        if (len < 250 || len > 400) {
+          if (!confirm(`Warning: Length is ${len} chars. The optimal Marc Lou range is 300 to 350. Do you still want to save?`)) {
+            return;
+          }
+        }
+
+        if (editingQueueIndex >= 0 && queueData[editingQueueIndex]) {
+          queueData[editingQueueIndex].text = text;
+          queueData[editingQueueIndex].char_count = len;
+          queueData[editingQueueIndex].customized = true;
+          queueData[editingQueueIndex].updated_at = new Date().toISOString();
+        } else {
+          // New Queue Item
+          const newIdx = queueData.length + 1;
+          queueData.push({
+            id: `custom_${Date.now()}`,
+            text: text,
+            char_count: len,
+            customized: true,
+            slot: `SLOT_${newIdx}`,
+            scheduled_label: `Run +${newIdx - 1} Hours`,
+            created_at: new Date().toISOString()
+          });
+        }
+
+        renderQueue(queueData);
+        closeEditor();
+        showToast("Queue updated. Saving changes...");
+        await saveQueueToRemote();
+      });
+
+      // Save Queue to Remote (via GitHub API if token exists, or prompt)
+      async function saveQueueToRemote() {
+        const token = localStorage.getItem('gh_pat_token');
+        if (!token) {
+          showToast("Changes kept in session. Configure GitHub Sync for 1-click cloud save.", "ℹ️");
+          return;
+        }
+
+        try {
+          // 1. Get existing file SHA
+          const getRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${QUEUE_FILE_PATH}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          });
+
+          let sha = null;
+          if (getRes.ok) {
+            const fileInfo = await getRes.json();
+            sha = fileInfo.sha;
+          }
+
+          // 2. Put updated content
+          const updatedJsonStr = JSON.stringify(queueData, null, 2);
+          const encodedContent = btoa(unescape(encodeURIComponent(updatedJsonStr)));
+
+          const putRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${QUEUE_FILE_PATH}`, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Accept': 'application/vnd.github.v3+json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              message: "chore(queue): customize upcoming scheduled post [skip ci]",
+              content: encodedContent,
+              sha: sha || undefined
+            })
+          });
+
+          if (!putRes.ok) {
+            const errData = await putRes.json();
+            throw new Error(errData.message || `HTTP ${putRes.status}`);
+          }
+
+          showToast("Committed to GitHub! Next run will publish your post.", "✓");
+        } catch (err) {
+          console.error("[GITHUB COMMIT ERROR]", err);
+          showToast(`Save to GitHub failed: ${err.message}`, "⚠");
+        }
+      }
+
+      // Direct Web Edit Link
+      btnOpenGithubWeb.addEventListener('click', () => {
+        window.open(`https://github.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/edit/main/${QUEUE_FILE_PATH}`, '_blank');
+      });
+
+      // Settings Modal Handlers
+      btnGithubSettings.addEventListener('click', () => {
+        inputGithubToken.value = localStorage.getItem('gh_pat_token') || '';
+        settingsModal.classList.add('open');
+      });
+
+      function closeSettings() {
+        settingsModal.classList.remove('open');
+      }
+      btnCloseSettings.addEventListener('click', closeSettings);
+      btnCancelSettings.addEventListener('click', closeSettings);
+
+      btnSaveToken.addEventListener('click', () => {
+        const val = inputGithubToken.value.trim();
+        if (val) {
+          localStorage.setItem('gh_pat_token', val);
+          showToast("GitHub Token saved securely in browser.");
+        } else {
+          localStorage.removeItem('gh_pat_token');
+          showToast("GitHub Token removed.");
+        }
+        updateTokenStatusDot();
+        closeSettings();
+      });
+
+      btnClearToken.addEventListener('click', () => {
+        localStorage.removeItem('gh_pat_token');
+        inputGithubToken.value = '';
+        updateTokenStatusDot();
+        showToast("GitHub Token cleared.");
+        closeSettings();
+      });
+
       // Refresh Button Handler
       btnRefresh.addEventListener('click', () => {
-        loadLogs();
+        loadAllData();
+        showToast("Refreshed queue & logs.");
       });
 
       // HTML Escape Utility
@@ -1044,7 +1920,7 @@
       // Auto-refresh feed every 45 seconds
       setInterval(() => {
         if (sessionStorage.getItem('stealth_gateway_auth') === 'verified') {
-          loadLogs();
+          loadAllData();
         }
       }, 45000);
     })();

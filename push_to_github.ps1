@@ -23,7 +23,7 @@ git remote add origin https://github.com/xrahulyadav/the.git
 
 # 4. Stage and commit files
 Write-Host "[4/5] Staging files and creating commit..." -ForegroundColor Yellow
-git add .github/ script.py index.html posts_log.json requirements.txt README.md .gitignore .env.example
+git add .github/ script.py index.html posts_log.json upcoming_queue.json requirements.txt README.md .gitignore .env.example
 git commit -m "feat: complete instagram threads auto-posting & monitoring system for github actions and pages"
 
 # 5. Push to GitHub
