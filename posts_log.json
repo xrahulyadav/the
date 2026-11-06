@@ -1,5 +1,16 @@
 [
   {
+    "id": "err_1794002043",
+    "text": "✨ Upgraded my personal biological hardware ✨\nMy daily tracking stack:\n🩺 Heart rate: 48 bpm resting baseline\n⚡ Cellular ATP: 5g creatine + mitochondrial Zone 2\n🧠 Neuroplasticity: morning solar exposure + cold plunge\n🥑 Cellular gut: prebiotic fibers + polyphenols\n\nYour health is your highest-leverage investment. Guard it 🧬.",
+    "char_count": 323,
+    "status": "FAILED",
+    "timestamp": "2026-11-06 21:54:03 UTC",
+    "threads_url": "https://www.threads.net",
+    "error": "Container creation failed: Error validating access token: Session has expired on Thursday, 05-Nov-26 06:00:00 PST. The current time is Friday, 06-Nov-26 13:54:03 PST.",
+    "customized": false,
+    "scheduled_time": "Next Available Run"
+  },
+  {
     "id": "err_1793983746",
     "text": "✨ I rebuilt my morning routine from scratch ✨\nHere is what changed:\n☀️ 07:00 AM: 15m direct sunlight for cortisol rhythm\n💧 07:15 AM: 500ml water + Celtic sea salt\n🏃 12:00 PM: 30m Zone 2 cardio & GLUT4\n🧠 03:00 PM: cold shower dopamine reset\n💤 10:30 PM: 65°F cool room for REM sleep\n\nYour daily habits build your future biology 🧬.",
     "char_count": 328,
